@@ -1,3 +1,4 @@
+# 基于Iris框架开发的本地购物系统
 ## 项目结构
 | 目录或文件 | 说明   |  
 |:---------|:-------:|
@@ -8,7 +9,7 @@
 | datasource     |  数据库配置|
 | models         |  数据模型|
 | router         |  路由层|
-| services       |  服务层|
+| services       |  服务层|g
 | utils          |  实用工具|
 | main.go  | go主程序入口|
 
