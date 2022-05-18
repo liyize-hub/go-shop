@@ -1,0 +1,29 @@
+2022-05-15 11:18:45	INFO	utils/log.go:48	日志启动成功
+2022-05-15 11:18:45	INFO	go-shop/main.go:38	创建iris 实例成功
+2022-05-15 11:18:45	INFO	datasource/mysql.go:51	插入表操作正常
+2022-05-15 11:18:59	INFO	controllers/admin.go:28	管理员登录
+2022-05-15 11:18:59	INFO	dao/admin.go:38	此用户不存在	{"admin": {"id":0,"name":"liyize","pwd":"","create_time":"0001-01-01T00:00:00Z","update_time":"0001-01-01T00:00:00Z","del_flag":0}}
+2022-05-15 11:18:59	INFO	utils/response.go:35	返回jsonData	{"response": {"status":1,"msg":"此用户不存在，请注册后使用！","data":""}}
+2022-05-15 11:19:03	INFO	controllers/admin.go:68	管理员注册
+2022-05-15 11:19:03	INFO	dao/admin.go:51	成功插入1条数据,数据id为1
+2022-05-15 11:19:03	INFO	utils/response.go:35	返回jsonData	{"response": {"status":0,"msg":"管理员注册成功","data":null}}
+2022-05-15 11:23:24	INFO	controllers/user.go:68	用户注册
+2022-05-15 11:23:24	INFO	dao/user.go:51	成功插入1条数据,数据id为1
+2022-05-15 11:23:24	INFO	utils/response.go:35	返回jsonData	{"response": {"status":0,"msg":"用户注册成功","data":null}}
+2022-05-15 11:24:06	INFO	controllers/user.go:28	用户登录
+2022-05-15 11:24:06	INFO	utils/response.go:35	返回jsonData	{"response": {"status":0,"msg":"用户登录成功","data":null}}
+2022-05-15 11:33:27	INFO	utils/log.go:48	日志启动成功
+2022-05-15 11:33:27	INFO	go-shop/main.go:38	创建iris 实例成功
+2022-05-15 11:33:27	INFO	datasource/mysql.go:51	插入表操作正常
+2022-05-15 11:34:18	INFO	controllers/user.go:68	用户注册
+2022-05-15 11:34:19	INFO	dao/user.go:51	成功插入1条数据,数据id为2
+2022-05-15 11:34:19	INFO	utils/response.go:35	返回jsonData	{"response": {"status":0,"msg":"用户注册成功","data":null}}
+2022-05-15 11:36:11	INFO	utils/log.go:48	日志启动成功
+2022-05-15 11:36:11	INFO	go-shop/main.go:38	创建iris 实例成功
+2022-05-15 11:36:11	INFO	datasource/mysql.go:51	插入表操作正常
+2022-05-15 11:36:23	INFO	controllers/user.go:68	用户注册
+2022-05-15 11:36:23	INFO	dao/user.go:51	成功插入1条数据,数据id为3
+2022-05-15 11:36:23	INFO	utils/response.go:35	返回jsonData	{"response": {"status":0,"msg":"用户注册成功","data":null}}
+2022-05-15 11:36:33	INFO	controllers/admin.go:68	管理员注册
+2022-05-15 11:36:34	INFO	dao/admin.go:51	成功插入1条数据,数据id为2
+2022-05-15 11:36:34	INFO	utils/response.go:35	返回jsonData	{"response": {"status":0,"msg":"管理员注册成功","data":null}}

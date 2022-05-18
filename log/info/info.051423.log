@@ -1,0 +1,12 @@
+2022-05-14 23:27:13	INFO	utils/log.go:48	日志启动成功
+2022-05-14 23:27:13	INFO	go-shop/main.go:38	创建iris 实例成功
+2022-05-14 23:27:13	INFO	datasource/mysql.go:50	插入表操作正常
+2022-05-14 23:28:49	INFO	utils/log.go:48	日志启动成功
+2022-05-14 23:28:49	INFO	go-shop/main.go:38	创建iris 实例成功
+2022-05-14 23:28:50	INFO	datasource/mysql.go:50	插入表操作正常
+2022-05-14 23:31:27	INFO	utils/log.go:48	日志启动成功
+2022-05-14 23:31:27	INFO	go-shop/main.go:38	创建iris 实例成功
+2022-05-14 23:31:27	INFO	datasource/mysql.go:51	插入表操作正常
+2022-05-14 23:53:19	INFO	utils/log.go:48	日志启动成功
+2022-05-14 23:53:19	INFO	go-shop/main.go:38	创建iris 实例成功
+2022-05-14 23:53:19	INFO	datasource/mysql.go:51	插入表操作正常

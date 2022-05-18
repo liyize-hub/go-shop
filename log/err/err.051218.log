@@ -1,0 +1,18 @@
+2022-05-12 18:30:15	ERROR	controllers/admin.go:48	GetByAdminNameAndPassword error	{"err": "此用户不存在，请注册后使用！"}
+2022-05-12 18:30:51	ERROR	dao/admin.go:47	插入失败	{"admin": {"id":0,"name":"liyize","pwd":"$2a$10$C5i3J..UDXaxfupF2PWvOuqMPtwiIrtt0bPPe5kK3ll9t8WvCohTe","create_time":"0001-01-01T00:00:00Z","update_time":"0001-01-01T00:00:00Z"}}
+2022-05-12 18:30:51	ERROR	controllers/admin.go:87	InsertAdmin error	{"err": "Error 1406: Data too long for column 'pwd' at row 1"}
+2022-05-12 18:30:58	ERROR	controllers/admin.go:48	GetByAdminNameAndPassword error	{"err": "此用户不存在，请注册后使用！"}
+2022-05-12 18:31:02	ERROR	controllers/admin.go:48	GetByAdminNameAndPassword error	{"err": "此用户不存在，请注册后使用！"}
+2022-05-12 18:31:31	ERROR	dao/admin.go:47	插入失败	{"admin": {"id":0,"name":"liyize","pwd":"$2a$10$kACbOd1HpaKkMtKH4IXCNe0/zkdfS.FZLBZ0P42f/9bDNmpnx1Yba","create_time":"0001-01-01T00:00:00Z","update_time":"0001-01-01T00:00:00Z"}}
+2022-05-12 18:31:31	ERROR	controllers/admin.go:87	InsertAdmin error	{"err": "Error 1406: Data too long for column 'pwd' at row 1"}
+2022-05-12 18:34:00	ERROR	dao/admin.go:47	插入失败	{"admin": {"id":0,"name":"liyize","pwd":"$2a$10$moC7rQn/7cGpAEn8FSpbd.DKi60mXpU0kpDnn5VeaICNMjBtwIcPK","create_time":"0001-01-01T00:00:00Z","update_time":"0001-01-01T00:00:00Z"}}
+2022-05-12 18:34:00	ERROR	controllers/admin.go:87	InsertAdmin error	{"err": "Error 1406: Data too long for column 'pwd' at row 1"}
+2022-05-12 18:35:15	ERROR	dao/admin.go:47	插入失败	{"admin": {"id":0,"name":"liyize","pwd":"$2a$10$3ygZyIUqBhmajSL4agRQcuPIIQAPYkLxgFEgNGdFw2ywV7ZwllNOO","create_time":"0001-01-01T00:00:00Z","update_time":"0001-01-01T00:00:00Z"}}
+2022-05-12 18:35:15	ERROR	controllers/admin.go:87	InsertAdmin error	{"err": "Error 1406: Data too long for column 'pwd' at row 1"}
+2022-05-12 18:36:41	ERROR	dao/admin.go:47	插入失败	{"admin": {"id":0,"name":"liyize","pwd":"$2a$10$izaZ.qdA3w4RilqfB.m6/OGsHaSQmw3Dx5sBc7E.wscuVXhCMRYva","create_time":"0001-01-01T00:00:00Z","update_time":"0001-01-01T00:00:00Z"}}
+2022-05-12 18:36:41	ERROR	controllers/admin.go:87	InsertAdmin error	{"err": "Error 1406: Data too long for column 'pwd' at row 1"}
+2022-05-12 18:40:19	ERROR	controllers/admin.go:48	GetByAdminNameAndPassword error	{"err": "密码输入错误，请重新输入！"}
+2022-05-12 18:40:24	ERROR	controllers/admin.go:48	GetByAdminNameAndPassword error	{"err": "此用户不存在，请注册后使用！"}
+2022-05-12 18:50:37	ERROR	controllers/user.go:48	GetByUserNameAndPassword error	{"err": "此用户不存在，请注册后使用！"}
+2022-05-12 18:50:53	ERROR	controllers/user.go:48	GetByUserNameAndPassword error	{"err": "密码输入错误，请重新输入！"}
+2022-05-12 18:50:59	ERROR	controllers/user.go:48	GetByUserNameAndPassword error	{"err": "此用户不存在，请注册后使用！"}

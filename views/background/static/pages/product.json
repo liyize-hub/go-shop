@@ -1,0 +1,192 @@
+{
+    "type": "page",
+    "title": "商品管理",
+    "body": [
+      {
+        "type": "crud",
+        "api": {
+          "url": "http://localhost:8080/product/select",
+          "method": "POST"
+        },
+        "filter": {
+          "title": "条件搜索",
+          "body": [
+            {
+              "type": "input-text",
+              "name": "id",
+              "label": "产品ID"
+            },
+            {
+              "type": "input-text",
+              "name": "name",
+              "label": "产品名称"
+            }
+          ]
+        },
+        "columns": [
+          {
+            "name": "id",
+            "label": "ID",
+            "type": "text"
+          },
+          {
+            "name": "name",
+            "label": "产品名",
+            "type": "text"
+          },
+          {
+            "type": "text",
+            "label": "产品数量",
+            "name": "num"
+          },
+          {
+            "type": "operation",
+            "label": "操作",
+            "buttons": [
+              {
+                "label": "编辑",
+                "type": "button",
+                "actionType": "dialog",
+                "level": "link",
+                "dialog": {
+                  "title": "编辑",
+                  "body": {
+                    "type": "form",
+                    "api": "post:http://localhost:8080/product/update",
+                    "body": [
+                      {
+                        "name": "id",
+                        "label": "ID",
+                        "type": "input-text"
+                      },
+                      {
+                        "name": "name",
+                        "label": "产品名",
+                        "type": "input-text"
+                      },
+                      {
+                        "label": "产品数量",
+                        "name": "num",
+                        "type": "input-text"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "label": "查看",
+                "type": "button",
+                "actionType": "dialog",
+                "level": "link",
+                "dialog": {
+                  "title": "查看详情",
+                  "body": {
+                    "type": "form",
+                    "api": "xxx/update",
+                    "body": [
+                      {
+                        "name": "id",
+                        "label": "ID",
+                        "type": "static"
+                      },
+                      {
+                        "name": "engine",
+                        "label": "渲染引擎",
+                        "type": "static"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "button",
+                "label": "删除",
+                "actionType": "ajax",
+                "level": "link",
+                "className": "text-danger",
+                "confirmText": "确定要删除？",
+                "api": {
+                  "url": "http://localhost:8080/product/delete?ID=${id}",
+                  "method": "GET"
+                }
+              }
+            ]
+          }
+        ],
+        "bulkActions": [
+          {
+            "type": "button",
+            "level": "danger",
+            "label": "批量删除",
+            "actionType": "ajax",
+            "confirmText": "确定要删除？",
+            "api": "/xxx/batch-delete"
+          },
+          {
+            "type": "button",
+            "label": "批量编辑",
+            "actionType": "dialog",
+            "dialog": {
+              "title": "批量编辑",
+              "size": "md",
+              "body": {
+                "type": "form",
+                "api": "/xxx/bacth-edit",
+                "body": [
+                  {
+                    "label": "字段1",
+                    "text": "字段1",
+                    "type": "input-text"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "itemActions": [],
+        "features": [
+          "filter",
+          "create",
+          "bulkDelete",
+          "bulkUpdate",
+          "update",
+          "view",
+          "delete"
+        ],
+        "headerToolbar": [
+          {
+            "label": "新增",
+            "type": "button",
+            "actionType": "dialog",
+            "level": "primary",
+            "dialog": {
+              "title": "新增",
+              "body": {
+                "type": "form",
+                "api": "post:http://localhost:8080/product/add",
+                "body": [
+                  {
+                    "type": "input-text",
+                    "name": "id",
+                    "label": "ID"
+                  },
+                  {
+                    "type": "input-text",
+                    "name": "name",
+                    "label": "商品名称"
+                  },
+                  {
+                      "type": "input-text",
+                      "name": "num",
+                      "label": "商品数量"
+                  }
+                ]
+              }
+            }
+          },
+          "bulkActions",
+          "pagination"
+        ]
+      }
+    ]
+  }

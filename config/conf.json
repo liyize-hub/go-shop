@@ -1,0 +1,26 @@
+{
+    "server": {
+        "AppName": "go-shop",
+        "LogLevel": "debug",
+        "Port": "8080",
+        "Mode": "dev"
+    },
+    "database": {
+        "Drive": "mysql",
+        "Port": "3306",
+        "User": "root",
+        "Pwd": "liyize01",
+        "Host": "127.0.0.1",
+        "Database": "shop",
+        "Charset": "utf8",
+        "SQLLog": true,
+        "MaxOpenConns": 10
+    },
+    "redis": {
+        "NetWork": "tcp",
+        "Addr": "localhost",
+        "Port": "6379",
+        "Pwd": "",
+        "Prefix": "Shop_"
+    }
+}
