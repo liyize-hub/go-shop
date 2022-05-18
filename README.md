@@ -9,7 +9,7 @@
 | datasource     |  数据库配置|
 | models         |  数据模型|
 | router         |  路由层|
-| services       |  服务层|g
+| services       |  服务层|
 | utils          |  实用工具|
 | main.go  | go主程序入口|
 
