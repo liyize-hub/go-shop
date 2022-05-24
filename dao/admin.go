@@ -42,6 +42,7 @@ func (d *AdminDao) GetAdmin(admin *models.Admin) (*models.Admin, error) {
 	return admin, err
 }
 
+//获取多个数据
 func (d *AdminDao) GetShops(admin *models.Admin) (*utils.ListAndCount, error) {
 	admins := make(map[int64]*models.Admin)
 	ad := []*models.Admin{}
@@ -66,6 +67,26 @@ func (d *AdminDao) GetShops(admin *models.Admin) (*utils.ListAndCount, error) {
 	count, _ := d.MustCols("flag").Count(admin)
 
 	return utils.Lists(ad, uint64(count)), nil
+}
+
+//获取单个数据
+func (d *AdminDao) GetShopByID(id int64) (*utils.ListAndCount, error) {
+	var ad models.Admin
+	exist, err := d.ID(id).Get(&ad)
+	if err != nil {
+		utils.Logger.Error("查询失败", zap.Any("admin", ad))
+		return nil, err
+	}
+	if !exist {
+		utils.Logger.Info("没有查到相关数据", zap.Any("admin", ad))
+		return nil, errors.New("没有查到相关数据")
+	}
+
+	// 返回值必须为数组
+	var admin []models.Admin
+	admin = append(admin, ad)
+
+	return utils.Lists(admin, 1), nil
 }
 
 func (d *AdminDao) AddAdmin(admin *models.Admin) (err error) {

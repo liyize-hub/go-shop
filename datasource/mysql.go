@@ -14,6 +14,8 @@ import (
 
 // 数据库连接
 func NewMysqlConn() (*xorm.Engine, error) {
+
+	
 	//1.创建数据库引擎对象
 	engine, err := xorm.NewEngine(config.DataBaseConfig.Drive, config.DataBaseConfig.URL)
 	if err != nil {

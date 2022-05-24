@@ -21,6 +21,6 @@
         "Addr": "localhost",
         "Port": "6379",
         "Pwd": "",
-        "Prefix": "Shop_"
+        "Prefix": ""
     }
 }
