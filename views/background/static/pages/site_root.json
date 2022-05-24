@@ -6,35 +6,41 @@
       {
         "label": "Home",
         "url": "/",
-        "schemaApi": "get:/static/pages/statistics.json"
+        "schemaApi": "get:/static/pages/statistics_root.json"
       },
       {
         "label": "管理列表",
-        "url": "manage",
+        "url": "/manage",
         "children": [
           {
             "label": "商品管理",
             "icon": "fa fa-list",
             "url": "/manage/product",
-            "schemaApi": "get:/static/pages/product.json"
+            "schemaApi": "get:/static/pages/product_root.json"
+          },
+          {
+            "label": "用户管理",
+            "icon": "fa fa-address-book",
+            "url": "/manage/user",
+            "schemaApi": "get:/static/pages/user_root.json"
           },
           {
             "label": "商铺管理",
             "icon": "fa fa-shopping-bag",
             "url": "/manage/shop",
-            "schemaApi": "get:/static/pages/shop.json"
+            "schemaApi": "get:/static/pages/shop_root.json"
           },
           {
             "label": "订单管理",
             "icon": "fa fa-paypal",
             "url": "/manage/order",
-            "schemaApi": "get:/static/pages/order.json"
+            "schemaApi": "get:/static/pages/order_root.json"
           },
           {
             "label": "秒杀活动管理",
             "icon": "fa fa-grav",
             "url": "/manage/activity",
-            "schemaApi": "get:/static/pages/activity.json"
+            "schemaApi": "get:/static/pages/activity_root.json"
           }
         ]
       }

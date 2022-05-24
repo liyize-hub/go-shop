@@ -8,6 +8,7 @@
 | log            |  日志文件|
 | dao            |  数据库操作|
 | datasource     |  数据库配置|
+| middleware     |  中间件   |
 | models         |  数据模型|
 | router         |  路由层|
 | services       |  服务层|

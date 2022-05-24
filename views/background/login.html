@@ -44,7 +44,13 @@
                         "api": {
                             "url": "/admin/login",
                             "method": "POST",
-                            "dataType": "form"
+                            "dataType": "form",
+                            adaptor: function (payload, response) {
+                                console.log(payload, response)
+                                if (payload.status == 0) {
+                                }
+                                return payload
+                            }
                         },
                         "redirect": "/background",
                         "title": "登录页面",

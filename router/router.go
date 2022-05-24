@@ -24,6 +24,9 @@ func Router(app *iris.Application) {
 		Expires: 1 * time.Hour, //1小时后过期
 	})
 
+	redis := datasource.NewRedis()
+	sess.UseDatabase(redis)
+
 	// 商品管理模块功能
 	product := mvc.New(app.Party("/product"))
 	product.Register(

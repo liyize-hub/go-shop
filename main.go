@@ -2,12 +2,14 @@ package main
 
 import (
 	"go-shop/config"
+	"go-shop/middleware"
 	"go-shop/router"
 	"go-shop/utils"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/logger"
 	"github.com/kataras/iris/v12/middleware/recover"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -34,6 +36,7 @@ func newApp() *iris.Application {
 	//1. 创建iris 实例
 	app := iris.New()
 	utils.Logger.Info("创建iris 实例成功")
+	iris.New().Logger().Info("创建iris 实例成功")
 
 	//2. 设置日志级别，开发阶段为debug
 	app.Logger().SetLevel(config.ServerConfig.LogLevel)
@@ -48,9 +51,20 @@ func newApp() *iris.Application {
 	app.Get("/", func(ctx iris.Context) {
 		ctx.View("background/login.html")
 	})
+
 	app.Get("/background", func(ctx iris.Context) {
-		ctx.View("background/index.html")
-	})
+		uid := ctx.GetCookie("uid")
+
+		if uid == "1" {
+			utils.Logger.Info("超级管理员登录！", zap.String("uid", uid))
+			ctx.View("background/index_root.html")
+			return
+		} else {
+			utils.Logger.Info("商铺管理员登录！", zap.String("uid", uid))
+			ctx.View("background/index.html")
+			return
+		}
+	}).Use(middleware.AuthConProduct)
 
 	//4. 注册静态资源
 	app.HandleDir("/static", "./views/background/static")

@@ -56,9 +56,14 @@ func (ac *adminService) AddAdmin(admin *models.Admin) (err error) {
 }
 
 //查询商铺信息
-func (ac *adminService) SelectShop(admin *models.Admin) (*utils.ListAndCount, error) {
-	adminListandCount, err := dao.NewAdminDao(ac.db).GetShops(admin)
-	return adminListandCount, err
+func (ac *adminService) SelectShop(admin *models.Admin) ( adminListandCount *utils.ListAndCount,err  error) {
+	if admin.ID == 1 {
+		adminListandCount, err = dao.NewAdminDao(ac.db).GetShops(admin)
+		return 
+	} else {
+		adminListandCount, err = dao.NewAdminDao(ac.db).GetShopByID(admin.ID)
+	}
+	return 
 }
 
 // 删除商铺
