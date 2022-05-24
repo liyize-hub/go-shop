@@ -32,16 +32,16 @@ func initServer() {
  * mysql配置
  */
 type dataBaseConfig struct {
-	Drive    string
-	Port     string
-	User     string
-	Pwd      string
-	Host     string
-	Database string
-	Charset  string
-	URL      string
-	SQLLog   bool
-	MaxOpenConns  int
+	Drive        string
+	Port         string
+	User         string
+	Pwd          string
+	Host         string
+	Database     string
+	Charset      string
+	URL          string
+	SQLLog       bool //是否输出sql日志
+	MaxOpenConns int
 }
 
 var DataBaseConfig dataBaseConfig

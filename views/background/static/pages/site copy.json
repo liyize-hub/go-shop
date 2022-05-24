@@ -15,26 +15,13 @@
           {
             "label": "商品管理",
             "icon": "fa fa-list",
-            "url": "/manage/product",
+            "url": "/product",
             "schemaApi": "get:/static/pages/product.json"
           },
           {
             "label": "用户管理",
-            "icon": "fa fa-address-book",
-            "url": "/manage/user",
+            "icon": "fa fa-list",
             "schemaApi": "get:/static/pages/user.json"
-          },
-          {
-            "label": "商铺管理",
-            "icon": "fa fa-shopping-bag",
-            "url": "/manage/shop",
-            "schemaApi": "get:/static/pages/shop.json"
-          },
-          {
-            "label": "秒杀活动管理",
-            "icon": "fa fa-grav",
-            "url": "/manage/activity",
-            "schemaApi": "get:/static/pages/activity.json"
           },
           {
             "label": "列表示例",

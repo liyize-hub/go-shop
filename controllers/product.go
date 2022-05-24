@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"go-shop/models"
 	"go-shop/services"
 	"go-shop/utils"
@@ -14,7 +13,7 @@ import (
 
 type ProductController struct {
 	Ctx            iris.Context            // iris框架自动为每个请求都绑定上下文对象
-	ProductService services.ProductService // Product功能实体
+	Service services.ProductService // Product功能实体
 }
 
 /**
@@ -26,16 +25,13 @@ func (p *ProductController) GetAll() mvc.Result {
 	p.Ctx.Application().Logger().Info(" get all Product start")
 	utils.Logger.Info("开始获取全部商品")
 
-	ProductListandCount, err := p.ProductService.SelectAllProduct()
+	ProductListandCount, err := p.Service.SelectAllProduct()
 	if err != nil {
-		return utils.NewJSONResponse(p.Ctx, models.ErrorCode.ERROR, "", err)
+		return utils.NewJSONResponse(models.ErrorCode.ERROR, "SelectAllProduct err", nil)
 	}
 
-	return utils.NewJSONResponse(p.Ctx,
-		models.ErrorCode.SUCCESS,
-		"查询成功",
-		ProductListandCount,
-	)
+	return utils.NewJSONResponse(models.ErrorCode.SUCCESS, "查询成功", ProductListandCount)
+
 }
 
 /**
@@ -47,26 +43,23 @@ func (p *ProductController) PostSelect() mvc.Result {
 	p.Ctx.Application().Logger().Info(" search Product start")
 	utils.Logger.Info("开始查询商品")
 
-	var product models.Product
+	var (
+		product models.Product
+	)
 
-	err := p.Ctx.ReadJSON(&product)
+	err := p.Ctx.ReadForm(&product)
 	if err != nil {
-		utils.Logger.Error("ReadJSON error", zap.Any("err", err))
-		return utils.NewJSONResponse(p.Ctx, models.ErrorCode.ERROR, "", err)
+		utils.Logger.Error("ReadForm error", zap.Any("err", err))
+		return utils.NewJSONResponse(models.ErrorCode.ERROR, "ReadForm error", nil)
 	}
 
-	fmt.Printf("%#v", product)
-	productListandCount, err := p.ProductService.SelectProducts(&product)
+	productListandCount, err := p.Service.SelectProducts(&product)
 	if err != nil {
 		utils.Logger.Error("SelectProduct error", zap.Any("err", err))
-		return utils.NewJSONResponse(p.Ctx, models.ErrorCode.ERROR, err.Error(), "")
+		return utils.NewJSONResponse(models.ErrorCode.ERROR, err.Error(), nil)
 	}
 
-	return utils.NewJSONResponse(p.Ctx,
-		models.ErrorCode.SUCCESS,
-		"查询成功",
-		productListandCount,
-	)
+	return utils.NewJSONResponse(models.ErrorCode.SUCCESS, "查询成功", productListandCount)
 }
 
 /**
@@ -90,11 +83,10 @@ func (p *ProductController) GetDelete() {
 		return
 	}
 
-	err = p.ProductService.DeleteProduct(id)
+	err = p.Service.DeleteProduct(id)
 	if err != nil {
 		utils.Logger.Error("DeleteProduct error", zap.Any("err", err))
 	}
-	//p.Ctx.Redirect("/Product/all")
 }
 
 /**
@@ -107,13 +99,12 @@ func (p *ProductController) PostAdd() {
 	utils.Logger.Info("开始插入商品")
 
 	var product models.Product
-
-	err := p.Ctx.ReadJSON(&product)
+	err := p.Ctx.ReadForm(&product)
 	if err != nil {
-		utils.Logger.Error("ReadJSON error", zap.Any("err", err))
+		utils.Logger.Error("ReadForm error", zap.Any("err", err))
 	}
 
-	err = p.ProductService.InsertProduct(&product)
+	err = p.Service.InsertProduct(&product)
 	if err != nil {
 		utils.Logger.Error("InsertProduct error", zap.Any("err", err))
 	}
@@ -132,9 +123,9 @@ func (p *ProductController) PostUpdate() {
 	utils.Logger.Info("更新商品")
 	var product models.Product
 
-	err := p.Ctx.ReadJSON(&product)
+	err := p.Ctx.ReadForm(&product)
 	if err != nil {
-		utils.Logger.Error("ReadJSON error", zap.Any("err", err))
+		utils.Logger.Error("ReadForm error", zap.Any("err", err))
 	}
 
 	if product.ID <= 0 {
@@ -142,7 +133,7 @@ func (p *ProductController) PostUpdate() {
 		return
 	}
 
-	err = p.ProductService.UpdateProduct(&product)
+	err = p.Service.UpdateProduct(&product)
 	if err != nil {
 		utils.Logger.Error("UpdateProduct error", zap.Any("err", err))
 	}
@@ -156,7 +147,7 @@ func (p *ProductController) PostUpdate() {
  * 方法：get
  */
 func (p *ProductController) GetDetail() mvc.View {
-	product, err := p.ProductService.SelectProductByID(1)
+	product, err := p.Service.SelectProductByID(1)
 	if err != nil {
 		utils.Logger.Error("GetDetail error", zap.Any("err", err))
 		return mvc.View{}

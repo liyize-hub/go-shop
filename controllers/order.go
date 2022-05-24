@@ -13,7 +13,7 @@ import (
 
 type OrderController struct {
 	Ctx          iris.Context          // iris框架自动为每个请求都绑定上下文对象
-	OrderService services.OrderService // Order功能实体
+	Service services.OrderService // Order功能实体
 }
 
 /**
@@ -25,16 +25,13 @@ func (o *OrderController) GetAll() mvc.Result {
 	o.Ctx.Application().Logger().Info(" get all Order start")
 	utils.Logger.Info("开始获取全部订单")
 
-	orderListandCount, err := o.OrderService.SelectAllOrder()
+	orderListandCount, err := o.Service.SelectAllOrder()
 	if err != nil {
-		return utils.NewJSONResponse(o.Ctx, models.ErrorCode.ERROR, "", err)
+		return utils.NewJSONResponse(models.ErrorCode.ERROR, "SelectAllOrder err", nil)
 	}
 
-	return utils.NewJSONResponse(o.Ctx,
-		models.ErrorCode.SUCCESS,
-		"查询成功",
-		orderListandCount,
-	)
+	return utils.NewJSONResponse(models.ErrorCode.SUCCESS, "查询成功", orderListandCount)
+
 }
 
 /**
@@ -46,25 +43,23 @@ func (o *OrderController) PostSelect() mvc.Result {
 	o.Ctx.Application().Logger().Info(" search Order start")
 	utils.Logger.Info("开始查询订单")
 
-	var order models.Order
+	var (
+		order models.Order
+	)
 
 	err := o.Ctx.ReadJSON(&order)
 	if err != nil {
 		utils.Logger.Error("ReadJSON error", zap.Any("err", err))
-		return utils.NewJSONResponse(o.Ctx, models.ErrorCode.ERROR, "", err)
+		return utils.NewJSONResponse(models.ErrorCode.ERROR, "ReadJSON error", nil)
 	}
 
-	orderListandCount, err := o.OrderService.SelectOrders(&order)
+	orderListandCount, err := o.Service.SelectOrders(&order)
 	if err != nil {
 		utils.Logger.Error("SelectOrder error", zap.Any("err", err))
-		return utils.NewJSONResponse(o.Ctx, models.ErrorCode.ERROR, err.Error(), "")
+		return utils.NewJSONResponse(models.ErrorCode.ERROR, err.Error(), nil)
 	}
 
-	return utils.NewJSONResponse(o.Ctx,
-		models.ErrorCode.SUCCESS,
-		"查询成功",
-		orderListandCount,
-	)
+	return utils.NewJSONResponse(models.ErrorCode.SUCCESS, "查询成功", orderListandCount)
 }
 
 /**
@@ -88,11 +83,10 @@ func (o *OrderController) GetDelete() {
 		return
 	}
 
-	err = o.OrderService.DeleteOrder(id)
+	err = o.Service.DeleteOrder(id)
 	if err != nil {
 		utils.Logger.Error("DeleteOrder error", zap.Any("err", err))
 	}
-	//p.Ctx.Redirect("/Order/all")
 }
 
 /**
@@ -111,13 +105,12 @@ func (o *OrderController) PostAdd() {
 		utils.Logger.Error("ReadJSON error", zap.Any("err", err))
 	}
 
-	err = o.OrderService.InsertOrder(&order)
+	err = o.Service.InsertOrder(&order)
 	if err != nil {
 		utils.Logger.Error("InsertOrder error", zap.Any("err", err))
 	}
 
 	utils.Logger.Info("插入订单成功", zap.Any("order", order))
-	//p.Ctx.Redirect("/Order/all")
 }
 
 /**
@@ -140,12 +133,11 @@ func (o *OrderController) PostUpdate() {
 		return
 	}
 
-	err = o.OrderService.UpdateOrder(&Order)
+	err = o.Service.UpdateOrder(&Order)
 	if err != nil {
 		utils.Logger.Error("UpdateOrder error", zap.Any("err", err))
 	}
 	utils.Logger.Info("更新成功", zap.Any("Order", Order))
-	//p.Ctx.Redirect("/Order/all") //跳转页面
 }
 
 /*func (p *ProductController) GetOrder() mvc.View {
@@ -181,7 +173,7 @@ func (o *OrderController) PostUpdate() {
 			OrderStatus: datamodels.OrderSuccess,
 		}
 		//新建订单
-		orderID, err = p.OrderService.InsertOrder(order)
+		orderID, err = p.Service.InsertOrder(order)
 		if err != nil {
 			p.Ctx.Application().Logger().Debug(err)
 		} else {

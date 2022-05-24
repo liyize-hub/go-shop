@@ -38,7 +38,7 @@ func (d *ProductDao) AddProduct(product *models.Product) (err error) {
 }
 
 func (d *ProductDao) DeleteProductByID(productID int64) (bool, error) {
-	count, err := d.Delete(&models.Product{ID: productID})
+	count, err := d.ID(productID).UseBool().Update(&models.Product{Flag: 1})
 	if err != nil {
 		utils.Logger.Error("删除失败", zap.Int64("delete id", productID))
 		return false, err
@@ -51,7 +51,7 @@ func (d *ProductDao) DeleteProductByID(productID int64) (bool, error) {
 }
 
 func (d *ProductDao) UpdateProductByID(productID int64, product *models.Product) (err error) {
-	count, err := d.ID(productID).Update(product)
+	count, err := d.ID(productID).MustCols("flag").Update(product)
 	if err != nil {
 		utils.Logger.Error("更新失败", zap.Int64("ProductID", productID), zap.Any("product", product))
 		return
@@ -65,8 +65,7 @@ func (d *ProductDao) UpdateProductByID(productID int64, product *models.Product)
 func (d *ProductDao) GetProducts(product *models.Product) (*utils.ListAndCount, error) {
 	products := make(map[int64]*models.Product)
 	pro := []*models.Product{}
-
-	err := d.Find(products, product) // 返回值，条件
+	err := d.MustCols("flag").Limit(product.Size, (product.No-1)*product.Size).Asc("id").Find(products, product) // 返回值，条件
 	if err != nil {
 		utils.Logger.Error("查询失败", zap.Any("product", product))
 		return nil, err
@@ -79,7 +78,8 @@ func (d *ProductDao) GetProducts(product *models.Product) (*utils.ListAndCount, 
 		pro = append(pro, v)
 	}
 
-	count := len(pro)
+	//搜索总数
+	count, _ := d.MustCols("flag").Count(product)
 
 	return utils.Lists(pro, uint64(count)), nil
 }

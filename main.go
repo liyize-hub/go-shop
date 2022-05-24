@@ -48,7 +48,7 @@ func newApp() *iris.Application {
 	app.Get("/", func(ctx iris.Context) {
 		ctx.View("background/login.html")
 	})
-	app.Get("/index", func(ctx iris.Context) {
+	app.Get("/background", func(ctx iris.Context) {
 		ctx.View("background/index.html")
 	})
 
