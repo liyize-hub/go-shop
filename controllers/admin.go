@@ -48,8 +48,20 @@ func (ac *AdminController) PostLogin() mvc.Result {
 		return utils.NewJSONResponse(models.ErrorCode.ERROR, err.Error(), nil)
 	}
 
+	//写入用户ID到cookie中
+	utils.GlobalCookie(ac.Ctx, "uid", strconv.FormatInt(ad.ID, 10))
+
+	uidByte := []byte(strconv.FormatInt(ad.ID, 10))
+	uidString, err := utils.EnPwdCode(uidByte)
+	if err != nil {
+		utils.Logger.Error("EnPwdCode error", zap.Any("err", err))
+		return utils.NewJSONResponse(models.ErrorCode.ERROR, err.Error(), nil)
+	}
+	//写入加密后的用户id到cookie
+	utils.GlobalCookie(ac.Ctx, "sign", uidString)
+
 	// 管理员存在 设置session
-	ac.Session.Set("adminID", strconv.FormatInt(ad.ID, 10))
+	//ac.Session.Set("adminID", strconv.FormatInt(ad.ID, 10))
 
 	//登录成功
 	return utils.NewJSONResponse(
@@ -105,6 +117,12 @@ func (p *AdminController) PostSelect() mvc.Result {
 	if err != nil {
 		utils.Logger.Error("ReadForm error", zap.Any("err", err))
 		return utils.NewJSONResponse(models.ErrorCode.ERROR, "ReadForm error", nil)
+	}
+
+	//从cookie中获取具体商铺
+	uid := p.Ctx.GetCookie("uid")
+	if uid != "1" {
+		admin.ID, _ = strconv.ParseInt(uid, 10, 64)
 	}
 
 	adminListandCount, err := p.Service.SelectShop(&admin)

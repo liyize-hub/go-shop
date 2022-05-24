@@ -12,7 +12,7 @@ import (
 )
 
 type ProductController struct {
-	Ctx            iris.Context            // iris框架自动为每个请求都绑定上下文对象
+	Ctx     iris.Context            // iris框架自动为每个请求都绑定上下文对象
 	Service services.ProductService // Product功能实体
 }
 
@@ -42,7 +42,6 @@ func (p *ProductController) GetAll() mvc.Result {
 func (p *ProductController) PostSelect() mvc.Result {
 	p.Ctx.Application().Logger().Info(" search Product start")
 	utils.Logger.Info("开始查询商品")
-
 	var (
 		product models.Product
 	)
@@ -51,6 +50,12 @@ func (p *ProductController) PostSelect() mvc.Result {
 	if err != nil {
 		utils.Logger.Error("ReadForm error", zap.Any("err", err))
 		return utils.NewJSONResponse(models.ErrorCode.ERROR, "ReadForm error", nil)
+	}
+
+	//从cookie中获取具体商铺
+	uid := p.Ctx.GetCookie("uid")
+	if uid != "1" {
+		product.ShopID, _ = strconv.ParseInt(uid, 10, 64)
 	}
 
 	productListandCount, err := p.Service.SelectProducts(&product)
@@ -102,6 +107,12 @@ func (p *ProductController) PostAdd() {
 	err := p.Ctx.ReadForm(&product)
 	if err != nil {
 		utils.Logger.Error("ReadForm error", zap.Any("err", err))
+	}
+
+	//从cookie中获取具体商铺
+	uid := p.Ctx.GetCookie("uid")
+	if uid != "1" {
+		product.ShopID, _ = strconv.ParseInt(uid, 10, 64)
 	}
 
 	err = p.Service.InsertProduct(&product)

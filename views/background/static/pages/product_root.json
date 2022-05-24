@@ -13,6 +13,37 @@
         "title": "条件搜索",
         "body": [
           {
+            "type": "select",
+            "name": "shop_id",
+            "label": "商铺名",
+            "options": [
+              {
+                "label": "家和超市",
+                "value": "2"
+              },
+              {
+                "label": "信誉楼",
+                "value": "3"
+              },
+              {
+                "label": "欢欢菜店",
+                "value": "4"
+              },
+              {
+                "label": "维品服饰",
+                "value": "5"
+              },
+              {
+                "label": "海丰电子",
+                "value": "6"
+              },
+              {
+                "label": "晨光书店",
+                "value": "7"
+              }
+            ]
+          },
+          {
             "type": "input-text",
             "name": "id",
             "label": "产品ID"
@@ -354,19 +385,19 @@
               "actionType": "ajax",
               "confirmText": "确定要恢复？",
               "api": {
-                "url": "/product/update",
-                "method": "POST",
-                "dataType": "form",
-                "data": {
-                  "id": "${id}",
-                  "flag": 0
-                }
+                  "url": "/product/update",
+                  "method": "POST",
+                  "dataType": "form",
+                  "data": {
+                      "id": "${id}",
+                      "flag": 0
+                  }
               },
               "placeholder": "-",
               "size": "sm",
               "level": "default",
               "visibleOn": "${flag==1}"
-            }
+          }
           ]
         }
       ],
@@ -478,6 +509,38 @@
                     "type": "input-text",
                     "label": "商品描述",
                     "name": "detail"
+                  },
+                  {
+                    "type": "select",
+                    "label": "所属商铺",
+                    "name": "shop_id",
+                    "options": [
+                      {
+                        "label": "家和超市",
+                        "value": "2"
+                      },
+                      {
+                        "label": "信誉楼",
+                        "value": "3"
+                      },
+                      {
+                        "label": "欢欢菜店",
+                        "value": "4"
+                      },
+                      {
+                        "label": "维品服饰",
+                        "value": "5"
+                      },
+                      {
+                        "label": "海丰电子",
+                        "value": "6"
+                      },
+                      {
+                        "label": "晨光书店",
+                        "value": "6"
+                      }
+                    ],
+                    "required": true
                   }
                 ]
               }
