@@ -3,7 +3,7 @@ package utils
 
 type ListAndCount struct {
 	Items interface{} `json:"items"`
-	Count uint64      `json:"count"`
+	Count uint64      `json:"total"`
 	Info  interface{} `json:"info"`
 }
 

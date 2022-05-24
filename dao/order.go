@@ -51,7 +51,7 @@ func (o *OrderDao) DeleteOrderByID(orderID int64) (bool, error) {
 }
 
 func (o *OrderDao) UpdateOrderByID(orderID int64, order *models.Order) (err error) {
-	count, err := o.ID(orderID).Update(order)
+	count, err := o.ID(orderID).MustCols("flag").Update(order)
 	if err != nil {
 		utils.Logger.Error("更新失败", zap.Int64("orderID", orderID), zap.Any("order", order))
 		return
@@ -61,10 +61,11 @@ func (o *OrderDao) UpdateOrderByID(orderID int64, order *models.Order) (err erro
 	return
 }
 
+//获取多个数据
 func (o *OrderDao) GetOrders(order *models.Order) (*utils.ListAndCount, error) {
 	orders := make(map[int64]*models.Order)
 
-	err := o.Find(orders, order) // 返回值，条件
+	err := o.MustCols("flag").Asc("id").Find(orders, order) // 返回值，条件
 	if err != nil {
 		utils.Logger.Error("查询失败", zap.Any("order", order))
 		return nil, err
@@ -92,11 +93,3 @@ func (o *OrderDao) GetOrder(order *models.Order) (*models.Order, error) {
 	return order, nil
 }
 
-/*func (o *OrderDao) GetAllOrderWithInfo(order *models.Order) (*utils.ListAndCount, error) {
-	result, err := o.Query("Select o.ID,p.name,u.name,o.orderStatus From order as o left join product as p left join user as u on o.product_id=p.id and o.user_id=u.id")
-	rows, errRows := o.mysqlConn.Query(sql)
-	if errRows != nil {
-		return nil, errRows
-	}
-	return common.GetResultRows(rows), err
-}*/

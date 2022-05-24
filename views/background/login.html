@@ -36,93 +36,125 @@
             let amis = amisRequire('amis/embed');
             // 通过替换下面这个配置来生成不同页面
             let amisJSON = {
-
-                type: 'page',
-                title: '本地购物商城',
-                body: {
-                    type: "form",
-                    api: {
-                        url: "http://localhost:8080/admin/login",
-                        method: "POST",
-                    },
-                    title: "登录页面",
-                    mode: "inline",
-                    autoFocus: false,
-                    redirect: "/index",
-                    body: [
-                        {
-                            type: "input-text",
-                            name: "name",
-                            placeholder: "请输入用户名",
-                            label: "用户名："
+                "type": "page",
+                "title": "本地购物商城",
+                "body": [
+                    {
+                        "type": "form",
+                        "api": {
+                            "url": "/admin/login",
+                            "method": "POST",
+                            "dataType": "form"
                         },
-                        {
-                            type: "input-password",
-                            name: "pwd",
-                            placeholder: "请输入密码",
-                            label: "密码："
-                        },
-                        {
-                            type: "checkbox",
-                            name: "rememberMe",
-                            option: "记住登录"
-                        },
-                        {
-                            type: "submit",
-                            label: "登录",
-                            className: "b-2x",
-                            block: false,
-                            level: "success"
-                        },
-                        {
-                            label: "注册",
-                            type: "button",
-                            actionType: "dialog",
-                            actions: {
-                                label: "提交表单",
-                                actionType: "submit",
-                                primary: true,
-                                type: "button"
+                        "redirect": "/background",
+                        "title": "登录页面",
+                        "body": [
+                            {
+                                "type": "input-text",
+                                "name": "name",
+                                "placeholder": "请输入用户名",
+                                "label": "用户名："
                             },
-                            dialog: {
-                                title: "注册页面",
-                                actions: [
-                                    {
-                                        label: "注册",
-                                        actionType: "submit",
-                                        primary: true,
-                                        type: "button"
-                                    }
-                                ],
-                                body: {
-                                    type: "form",
-                                    api: {
-                                        url: "http://localhost:8080/admin/register",
-                                        method: "POST",
-                                    },
-                                    body: [
-                                        {
-                                            type: "input-text",
-                                            label: "姓名",
-                                            name: "name",
-                                            required: true,
-                                            placeholder: "请输入用户名",
+                            {
+                                "type": "input-password",
+                                "name": "pwd",
+                                "placeholder": "密码",
+                                "label": "密码："
+                            },
+                            {
+                                "type": "submit",
+                                "label": "登录",
+                                "className": "b-2x",
+                                "block": false,
+                                "level": "success"
+                            },
+                            {
+                                "type": "button",
+                                "label": "注册",
+                                "className": "b-2x",
+                                "level": "warning",
+                                "actionType": "dialog",
+                                "dialog": {
+                                    "title": "注册账号",
+                                    "body": {
+                                        "type": "form",
+                                        "api": {
+                                            "url": "/admin/register",
+                                            "method": "POST",
+                                            "dataType": "form"
                                         },
-                                        {
-                                            type: "input-password",
-                                            label: "密码",
-                                            name: "pwd",
-                                            required: true,
-                                            placeholder: "请输入密码"
-                                        }
-                                    ]
+                                        "body": [
+                                            {
+                                                "type": "input-text",
+                                                "label": "姓名",
+                                                "name": "name",
+                                                "required": true
+                                            },
+                                            {
+                                                "type": "input-password",
+                                                "label": "密码",
+                                                "name": "pwd",
+                                                "required": true
+                                            },
+                                            {
+                                                "type": "input-text",
+                                                "label": "电话",
+                                                "name": "phone",
+                                                "required": true
+                                            },
+                                            {
+                                                "type": "input-text",
+                                                "label": "商铺名称",
+                                                "name": "shop_name",
+                                                "required": true
+                                            },
+                                            {
+                                                "type": "input-text",
+                                                "label": "商铺地址",
+                                                "name": "shop_address",
+                                                "required": true
+                                            },
+                                            {
+                                                "type": "input-text",
+                                                "label": "商铺简介",
+                                                "name": "shop_detail",
+                                                "required": true
+                                            },
+                                            {
+                                                "type": "select",
+                                                "label": "商铺经营类型",
+                                                "name": "shop_type",
+                                                "options": [
+                                                    {
+                                                        "label": "综合性超市",
+                                                        "value": "1"
+                                                    },
+                                                    {
+                                                        "label": "数码产品",
+                                                        "value": "2"
+                                                    },
+                                                    {
+                                                        "label": "办公书籍",
+                                                        "value": "3"
+                                                    },
+                                                    {
+                                                        "label": "服装服饰",
+                                                        "value": "4"
+                                                    },
+                                                    {
+                                                        "label": "大型商场",
+                                                        "value": "5"
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
                                 }
-                            },
-                            className: "b-2x",
-                            level: "warning"
-                        }
-                    ]
-                }
+                            }
+                        ],
+                        "mode": "inline"
+                    }
+                ]
             };
             let amisScoped = amis.embed(
                 '#root',

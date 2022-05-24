@@ -1,20 +1,9 @@
 package utils
 
 import (
-	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"go.uber.org/zap"
 )
-
-/*/ SendErrJSON 有错误发生时，发送错误JSON
-func SendErrJSON(msg string, ctx iris.Context) {
-
-	ctx.JSON(iris.Map{
-		"errNo": models.ErrorCode.ERROR,
-		"msg":   msg,
-		"data":  iris.Map{},
-	})
-}*/
 
 type Response struct {
 	ErrNo  int         `json:"status"`
@@ -22,7 +11,7 @@ type Response struct {
 	Data   interface{} `json:"data"`
 }
 
-func NewJSONResponse(ctx iris.Context, errno int, msg string, data interface{}) mvc.Response {
+func NewJSONResponse(errno int, msg string, data interface{}, url ...string) mvc.Response {
 
 	var (
 		jsonData Response
@@ -33,6 +22,15 @@ func NewJSONResponse(ctx iris.Context, errno int, msg string, data interface{}) 
 		Data:   data,
 	}
 	Logger.Info("返回jsonData", zap.Any("response", jsonData))
+
+	// 判断跳转地址
+	if len(url) != 0 {
+		return mvc.Response{
+			Path:   url[0],
+			Object: jsonData,
+		}
+	}
+
 	return mvc.Response{Object: jsonData}
 }
 

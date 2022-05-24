@@ -33,7 +33,7 @@ func NewMysqlConn() (*xorm.Engine, error) {
 		new(models.Admin),
 		new(models.User),
 		new(models.Order),
-		new(models.Address),
+		new(models.Activity),
 	) //将自定义的结构体同步到数据库中
 	if err != nil {
 		utils.Logger.Error("结构体同步数据库失败", zap.Any("error", err))

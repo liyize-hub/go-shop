@@ -1,0 +1,368 @@
+{
+    "type": "page",
+    "title": "商铺管理",
+    "body": [
+        {
+            "type": "crud",
+            "api": {
+                "url": "/admin/select",
+                "method": "POST",
+                "dataType": "form"
+            },
+            "filter": {
+                "title": "条件搜索",
+                "body": [
+                    {
+                        "type": "input-text",
+                        "name": "id",
+                        "label": "商铺管理员ID"
+                    },
+                    {
+                        "type": "input-text",
+                        "name": "shop_name",
+                        "label": "商铺名"
+                    },
+                    {
+                        "type": "select",
+                        "name": "shop_type",
+                        "options": [
+                            {
+                                "label": "综合性超市",
+                                "value": 1
+                            },
+                            {
+                                "label": "数码产品",
+                                "value": "2"
+                            },
+                            {
+                                "label": "办公书籍",
+                                "value": "3"
+                            },
+                            {
+                                "label": "服装服饰",
+                                "value": "4"
+                            },
+                            {
+                                "label": "大型商场",
+                                "value": "5"
+                            }
+                        ],
+                        "label": "商铺经营类型"
+                    },
+                    {
+                        "type": "input-datetime",
+                        "name": "create_time",
+                        "label": "开店时间",
+                        "id": "u:9496af3695f9"
+                    },
+                    {
+                        "type": "radios",
+                        "name": "flag",
+                        "label": "商铺状态",
+                        "options": [
+                            {
+                                "label": "未激活",
+                                "value": 0
+                            },
+                            {
+                                "label": "有效",
+                                "value": 1
+                            },
+                            {
+                                "label": "被封禁",
+                                "value": 2
+                            },
+                            {
+                                "label": "被删除",
+                                "value": 3
+                            }
+                        ],
+                        "submitOnChange": true
+                    }
+                ]
+            },
+            "columns": [
+                {
+                    "name": "id",
+                    "label": "商铺ID",
+                    "type": "text"
+                },
+                {
+                    "name": "shop_img",
+                    "label": "商铺图片",
+                    "type": "text"
+                },
+                {
+                    "type": "text",
+                    "label": "商铺名",
+                    "name": "shop_name"
+                },
+                {
+                    "type": "text",
+                    "label": "商铺经营类型",
+                    "name": "shop_type"
+                },
+                {
+                    "type": "operation",
+                    "label": "操作",
+                    "buttons": [
+                        {
+                            "label": "编辑",
+                            "type": "button",
+                            "actionType": "dialog",
+                            "level": "link",
+                            "dialog": {
+                                "title": "编辑",
+                                "body": {
+                                    "type": "form",
+                                    "api": {
+                                        "url": "/admin/update",
+                                        "method": "POST",
+                                        "dataType": "form"
+                                    },
+                                    "body": [
+                                        {
+                                            "type": "static",
+                                            "name": "id",
+                                            "label": "商铺ID"
+                                        },
+                                        {
+                                            "label": "商铺状态",
+                                            "type": "select",
+                                            "name": "flag",
+                                            "options": [
+                                                {
+                                                    "label": "未激活",
+                                                    "value": 0
+                                                },
+                                                {
+                                                    "label": "有效",
+                                                    "value": 1
+                                                },
+                                                {
+                                                    "label": "被封禁",
+                                                    "value": 2
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "input-text",
+                                            "name": "name",
+                                            "label": "管理员名称"
+                                        },
+                                        {
+                                            "type": "input-text",
+                                            "name": "phone",
+                                            "label": "商家电话"
+                                        },
+                                        {
+                                            "type": "input-text",
+                                            "name": "shop_address",
+                                            "label": "商铺地址"
+                                        },
+                                        {
+                                            "type": "input-text",
+                                            "name": "shop_name",
+                                            "label": "商铺名称"
+                                        },
+                                        {
+                                            "type": "input-text",
+                                            "name": "shop_detail",
+                                            "label": "商铺简介"
+                                        },
+                                        {
+                                            "type": "input-text",
+                                            "name": "shop_img",
+                                            "label": "商铺图片"
+                                        },
+                                        {
+                                            "label": "商铺经营类型",
+                                            "type": "select",
+                                            "name": "shop_type",
+                                            "options": [
+                                                {
+                                                    "label": "综合性超市",
+                                                    "value": 1
+                                                },
+                                                {
+                                                    "label": "数码产品",
+                                                    "value": "2"
+                                                },
+                                                {
+                                                    "label": "办公书籍",
+                                                    "value": "3"
+                                                },
+                                                {
+                                                    "label": "服装服饰",
+                                                    "value": "4"
+                                                },
+                                                {
+                                                    "label": "大型商场",
+                                                    "value": "5"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "label": "查看",
+                            "type": "button",
+                            "actionType": "dialog",
+                            "level": "link",
+                            "dialog": {
+                                "title": "查看商铺详情",
+                                "body": {
+                                    "type": "form",
+                                    "api": {
+                                        "url": "/admin/select",
+                                        "method": "POST",
+                                        "dataType": "form"
+                                    },
+                                    "body": [
+                                        {
+                                            "type": "static",
+                                            "label": "商铺ID",
+                                            "name": "id"
+                                        },
+                                        {
+                                            "type": "divider"
+                                        },
+                                        {
+                                            "type": "static",
+                                            "label": "商铺管理员姓名",
+                                            "name": "name"
+                                        },
+                                        {
+                                            "type": "static",
+                                            "label": "商家电话",
+                                            "name": "phone"
+                                        },
+                                        {
+                                            "type": "static",
+                                            "label": "商铺地址",
+                                            "name": "shop_address"
+                                        },
+                                        {
+                                            "type": "static",
+                                            "label": "商铺简介",
+                                            "name": "shop_detail"
+                                        },
+                                        {
+                                            "type": "static",
+                                            "label": "商铺开店时间",
+                                            "name": "create_time"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "type": "button",
+                            "label": "删除",
+                            "actionType": "ajax",
+                            "level": "link",
+                            "className": "text-danger",
+                            "confirmText": "确定要删除？",
+                            "api": {
+                                "url": "/admin/delete?id=${id}",
+                                "method": "GET",
+                                "visibleOn": "${flag!=3}"
+                            }
+                        },
+                        {
+                            "type": "button",
+                            "label": "激活",
+                            "actionType": "ajax",
+                            "confirmText": "确定要激活？",
+                            "api": {
+                                "url": "/admin/update",
+                                "method": "POST",
+                                "dataType": "form",
+                                "data": {
+                                    "id": "${id}",
+                                    "flag": 1
+                                }
+                            },
+                            "placeholder": "-",
+                            "size": "sm",
+                            "level": "success",
+                            "visibleOn": "${flag==0}"
+                        },
+                        {
+                            "type": "button",
+                            "label": "封禁",
+                            "actionType": "ajax",
+                            "confirmText": "确定要封禁？",
+                            "api": {
+                                "url": "/admin/update",
+                                "method": "POST",
+                                "dataType": "form",
+                                "data": {
+                                    "id": "${id}",
+                                    "flag": 2
+                                }
+                            },
+                            "placeholder": "-",
+                            "size": "sm",
+                            "level": "danger",
+                            "visibleOn": "${flag==1}"
+                        },
+                        {
+                            "type": "button",
+                            "label": "解封",
+                            "actionType": "ajax",
+                            "confirmText": "确定要解封？",
+                            "api": {
+                                "url": "/admin/update",
+                                "method": "POST",
+                                "dataType": "form",
+                                "data": {
+                                    "id": "${id}",
+                                    "flag": 1
+                                }
+                            },
+                            "placeholder": "-",
+                            "size": "sm",
+                            "level": "warning",
+                            "visibleOn": "${flag==2}"
+                        },
+                        {
+                            "type": "button",
+                            "label": "恢复",
+                            "actionType": "ajax",
+                            "confirmText": "确定要恢复？",
+                            "api": {
+                                "url": "/admin/update",
+                                "method": "POST",
+                                "dataType": "form",
+                                "data": {
+                                    "id": "${id}",
+                                    "flag": 1
+                                }
+                            },
+                            "placeholder": "-",
+                            "size": "sm",
+                            "level": "default",
+                            "visibleOn": "${flag==3}"
+                        }
+                    ]
+                }
+            ],
+            "headerToolbar": [
+                "switch-per-page"
+            ],
+            "perPageAvailable": [
+                5,
+                10,
+                20
+            ],
+            "mode": "table",
+            "footerToolbar": [
+                "statistics",
+                "pagination"
+            ]
+        }
+    ]
+}

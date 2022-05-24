@@ -4,21 +4,18 @@ import "time"
 
 // 订单结构体
 type Order struct {
-	ID          int64      `json:"id" xorm:"pk autoincr"`
-	UserId      int64      `json:"user_id" xorm:"index"` //用户编号Id
-	User        *User      `xorm:"-"`                    //订单对应的账户，并不进行结构体字段映射
-	ProductId   int64      `json:"product_id" xorm:"index"`
-	Product     []*Product `xorm:"-"` //商品结构体，不进行映射
-	OrderStatus int        `json:"order_status"`
-	AddressId   int64      `json:"address_id" xorm:"index"` //地址结构体的Id
-	Address     *Address   `xorm:"-"`                       //地址结构体，不进行映射
-	SumMoney    int64      `json:"sum_money" xorm:"default 0"`
-	Time        time.Time  `json:"time" xorm:"updated"`       //时间
-	DelFlag     int        `json:"del_flag" xorm:"default 0"` //删除标志 0为正常 1为已删除
+	ID         int64     `json:"id" xorm:"pk autoincr"`
+	UserId     int64     `json:"user_id" xorm:"index"` //用户编号Id
+	User       *User     `xorm:"-"`                    //订单对应的账户，并不进行结构体字段映射
+	Status     int       `json:"status"`               //订单状态
+	SumMoney   int       `json:"sum_money" xorm:"default 0"`
+	CreateTime time.Time `json:"time" xorm:"created"`                          //订单创建时间
+	Flag       int       `json:"flag" form:"flag" xorm:"tinyint(1) default 0"` //是否被删除的标志字段 软删除 0为有效，1为删除
 }
 
 const (
-	OrderWait    = iota
-	OrderSuccess //1
-	OrderFailed  //2
+	OrderWait    = iota //待支付
+	OrderPay            //已支付
+	OrderSend           //已发货
+	OrderSuccess        //已完成
 )
