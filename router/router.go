@@ -34,6 +34,13 @@ func Router(app *iris.Application) {
 	)
 	product.Handle(new(controllers.ProductController))
 
+	// 秒杀活动管理模块功能
+	activity := mvc.New(app.Party("/activity"))
+	activity.Register(
+		services.NewActivityService(db),
+	)
+	activity.Handle(new(controllers.ActivityController))
+
 	// 订单管理模块功能
 	order := mvc.New(app.Party("/order"))
 	order.Register(

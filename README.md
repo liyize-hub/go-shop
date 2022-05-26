@@ -3,6 +3,7 @@
 ## 项目结构
 | 目录或文件 | 说明   |  
 |:---------|:-------:|
+| background     |  后台管理系统界面|
 | config         |  配置|
 | controllers    |  控制器|
 | log            |  日志文件|
@@ -13,6 +14,7 @@
 | router         |  路由层|
 | services       |  服务层|
 | utils          |  实用工具|
+| wechat         |  微信小程序界面|
 | main.go  | go主程序入口|
 
 
