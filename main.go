@@ -46,10 +46,10 @@ func newApp() *iris.Application {
 	app.Use(logger.New())  //log the requests to the terminal. 	eg. app.Logger().Info(ctx.Path())
 
 	//3. 注册视图文件
-	template := iris.HTML("./views", ".html") //.Layout("login.html").Reload(true)
+	template := iris.HTML("./background", ".html") //.Layout("login.html").Reload(true)
 	app.RegisterView(template)
 	app.Get("/", func(ctx iris.Context) {
-		ctx.View("background/login.html")
+		ctx.View("login.html")
 	})
 
 	app.Get("/background", func(ctx iris.Context) {
@@ -57,24 +57,27 @@ func newApp() *iris.Application {
 
 		if uid == "1" {
 			utils.Logger.Info("超级管理员登录！", zap.String("uid", uid))
-			ctx.View("background/index_root.html")
+			ctx.View("index_root.html")
 			return
 		} else {
 			utils.Logger.Info("商铺管理员登录！", zap.String("uid", uid))
-			ctx.View("background/index.html")
+			ctx.View("index.html")
 			return
 		}
 	}).Use(middleware.AuthConProduct)
 
+	app.Get("/test", func(ctx iris.Context) {
+		ctx.WriteString("test")
+	})
+
 	//4. 注册静态资源
-	app.HandleDir("/static", "./views/background/static")
-	app.HandleDir("/assets", "./views/fronted/assets")
+	app.HandleDir("/static", "./background/static")
 
 	//出现异常跳转到指定页面
 	app.OnAnyErrorCode(func(ctx iris.Context) {
 		ctx.ViewData("message", ctx.Values().GetStringDefault("message", "访问页面出错！"))
 		ctx.ViewLayout("")
-		ctx.View("shared/error.html")
+		ctx.View("error.html")
 	})
 
 	return app

@@ -28,6 +28,9 @@ func NewProductDao(db *xorm.Engine) *ProductDao {
 }
 
 func (d *ProductDao) AddProduct(product *models.Product) (err error) {
+	if product.Num == 0 || product.Price == 0 {
+		return errors.New("插入的商品数量或者价格为0")
+	}
 	count, err := d.Insert(product)
 	if err != nil {
 		utils.Logger.Error("插入失败", zap.Any("product", product))
@@ -51,7 +54,7 @@ func (d *ProductDao) DeleteProductByID(productID int64) (bool, error) {
 }
 
 func (d *ProductDao) UpdateProductByID(productID int64, product *models.Product) (err error) {
-	count, err := d.ID(productID).MustCols("flag").Update(product)
+	count, err := d.ID(productID).MustCols("flag", "num").Update(product)
 	if err != nil {
 		utils.Logger.Error("更新失败", zap.Int64("ProductID", productID), zap.Any("product", product))
 		return

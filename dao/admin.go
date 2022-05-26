@@ -27,6 +27,40 @@ func NewAdminDao(db *xorm.Engine) *AdminDao {
 	return &AdminDao{db}
 }
 
+func (d *AdminDao) AddAdmin(admin *models.Admin) (err error) {
+	count, err := d.Insert(admin)
+	if err != nil {
+		utils.Logger.Error("插入失败", zap.Any("admin", admin))
+		return
+	}
+	utils.SugarLogger.Infof("成功插入%d条数据,数据id为%d", count, admin.ID)
+	return
+}
+
+func (d *AdminDao) DeleteShopByID(AdminID int64) (bool, error) {
+	count, err := d.ID(AdminID).Update(&models.Admin{Flag: 3})
+	if err != nil {
+		utils.Logger.Error("删除失败", zap.Int64("delete id", AdminID))
+		return false, err
+	}
+
+	if count == 1 {
+		return true, nil
+	}
+	return false, nil
+}
+
+func (d *AdminDao) UpdateShopByID(adminID int64, admin *models.Admin) (err error) {
+	count, err := d.ID(adminID).MustCols("flag").Update(admin)
+	if err != nil {
+		utils.Logger.Error("更新失败", zap.Int64("AdminID", adminID), zap.Any("admin", admin))
+		return
+	}
+	utils.SugarLogger.Infof("成功更新%d条数据,数据id为%d", count, adminID)
+
+	return
+}
+
 func (d *AdminDao) GetAdmin(admin *models.Admin) (*models.Admin, error) {
 
 	exist, err := d.Get(admin)
@@ -87,38 +121,4 @@ func (d *AdminDao) GetShopByID(id int64) (*utils.ListAndCount, error) {
 	admin = append(admin, ad)
 
 	return utils.Lists(admin, 1), nil
-}
-
-func (d *AdminDao) AddAdmin(admin *models.Admin) (err error) {
-	count, err := d.Insert(admin)
-	if err != nil {
-		utils.Logger.Error("插入失败", zap.Any("admin", admin))
-		return
-	}
-	utils.SugarLogger.Infof("成功插入%d条数据,数据id为%d", count, admin.ID)
-	return
-}
-
-func (d *AdminDao) DeleteShopByID(AdminID int64) (bool, error) {
-	count, err := d.ID(AdminID).Update(&models.Admin{Flag: 3})
-	if err != nil {
-		utils.Logger.Error("删除失败", zap.Int64("delete id", AdminID))
-		return false, err
-	}
-
-	if count == 1 {
-		return true, nil
-	}
-	return false, nil
-}
-
-func (d *AdminDao) UpdateShopByID(adminID int64, admin *models.Admin) (err error) {
-	count, err := d.ID(adminID).MustCols("flag").Update(admin)
-	if err != nil {
-		utils.Logger.Error("更新失败", zap.Int64("AdminID", adminID), zap.Any("admin", admin))
-		return
-	}
-	utils.SugarLogger.Infof("成功更新%d条数据,数据id为%d", count, adminID)
-
-	return
 }

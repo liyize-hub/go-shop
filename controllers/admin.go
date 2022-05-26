@@ -97,41 +97,6 @@ func (ac *AdminController) PostRegister() mvc.Result {
 	}
 
 	return utils.NewJSONResponse(models.ErrorCode.SUCCESS, "管理员注册成功", nil)
-
-}
-
-/**
- * 查询商铺信息
- * 接口：/admin/select
- * 方法：post
- */
-func (p *AdminController) PostSelect() mvc.Result {
-	p.Ctx.Application().Logger().Info(" search admin start")
-	utils.Logger.Info("开始查询商Admin铺")
-
-	var (
-		admin models.Admin
-	)
-
-	err := p.Ctx.ReadForm(&admin)
-	if err != nil {
-		utils.Logger.Error("ReadForm error", zap.Any("err", err))
-		return utils.NewJSONResponse(models.ErrorCode.ERROR, "ReadForm error", nil)
-	}
-
-	//从cookie中获取具体商铺
-	uid := p.Ctx.GetCookie("uid")
-	if uid != "1" {
-		admin.ID, _ = strconv.ParseInt(uid, 10, 64)
-	}
-
-	adminListandCount, err := p.Service.SelectShop(&admin)
-	if err != nil {
-		utils.Logger.Error("Selectadmin error", zap.Any("err", err))
-		return utils.NewJSONResponse(models.ErrorCode.ERROR, err.Error(), nil)
-	}
-
-	return utils.NewJSONResponse(models.ErrorCode.SUCCESS, "查询成功", adminListandCount)
 }
 
 /**
@@ -139,11 +104,11 @@ func (p *AdminController) PostSelect() mvc.Result {
  * 接口：/Admin/manager
  * 方法：post
  */
-func (p *AdminController) GetDelete() {
-	p.Ctx.Application().Logger().Info(" delete Admin start")
+func (ac *AdminController) GetDelete() {
+	ac.Ctx.Application().Logger().Info(" delete Admin start")
 	utils.Logger.Info("开始删除商Admin铺")
 
-	idString := p.Ctx.URLParam("id")
+	idString := ac.Ctx.URLParam("id")
 	if idString == "" {
 		utils.Logger.Info("传入id为空")
 		return
@@ -155,7 +120,7 @@ func (p *AdminController) GetDelete() {
 		return
 	}
 
-	err = p.Service.DeleteShop(id)
+	err = ac.Service.DeleteShop(id)
 	if err != nil {
 		utils.Logger.Error("DeleteAdmin error", zap.Any("err", err))
 	}
@@ -166,12 +131,12 @@ func (p *AdminController) GetDelete() {
  * 接口：/Admin/update
  * 方法：post
  */
-func (p *AdminController) PostUpdate() {
-	p.Ctx.Application().Logger().Info(" update Admin ")
+func (ac *AdminController) PostUpdate() {
+	ac.Ctx.Application().Logger().Info(" update Admin ")
 	utils.Logger.Info("更新商铺")
 	var Admin models.Admin
 
-	err := p.Ctx.ReadForm(&Admin)
+	err := ac.Ctx.ReadForm(&Admin)
 	if err != nil {
 		utils.Logger.Error("ReadForm error", zap.Any("err", err))
 	}
@@ -181,10 +146,44 @@ func (p *AdminController) PostUpdate() {
 		return
 	}
 
-	err = p.Service.UpdateShop(&Admin)
+	err = ac.Service.UpdateShop(&Admin)
 	if err != nil {
 		utils.Logger.Error("UpdateAdmin error", zap.Any("err", err))
 	}
 	utils.Logger.Info("更新成功", zap.Any("Admin", Admin))
 	//p.Ctx.Redirect("/Admin/all") //跳转页面
+}
+
+/**
+ * 查询商铺信息
+ * 接口：/admin/select
+ * 方法：post
+ */
+ func (ac *AdminController) PostSelect() mvc.Result {
+	ac.Ctx.Application().Logger().Info(" search admin start")
+	utils.Logger.Info("开始查询商铺")
+
+	var (
+		admin models.Admin
+	)
+
+	err := ac.Ctx.ReadForm(&admin)
+	if err != nil {
+		utils.Logger.Error("ReadForm error", zap.Any("err", err))
+		return utils.NewJSONResponse(models.ErrorCode.ERROR, "ReadForm error", nil)
+	}
+
+	//从cookie中获取具体商铺
+	uid := ac.Ctx.GetCookie("uid")
+	if uid != "1" {
+		admin.ID, _ = strconv.ParseInt(uid, 10, 64)
+	}
+
+	adminListandCount, err := ac.Service.SelectShop(&admin)
+	if err != nil {
+		utils.Logger.Error("Selectadmin error", zap.Any("err", err))
+		return utils.NewJSONResponse(models.ErrorCode.ERROR, err.Error(), nil)
+	}
+
+	return utils.NewJSONResponse(models.ErrorCode.SUCCESS, "查询成功", adminListandCount)
 }

@@ -17,7 +17,7 @@ type AdminService interface {
 	AddAdmin(*models.Admin) error                                               //添加管理员,注册商铺
 	SelectShop(*models.Admin) (*utils.ListAndCount, error)                      //查询商铺信息
 	DeleteShop(int64) error                                                     //删除商品
-	UpdateShop(*models.Admin) error                                        //更新商品
+	UpdateShop(*models.Admin) error                                             //更新商品
 }
 
 // 管理员服务实现结构体
@@ -55,17 +55,6 @@ func (ac *adminService) AddAdmin(admin *models.Admin) (err error) {
 	return dao.NewAdminDao(ac.db).AddAdmin(admin)
 }
 
-//查询商铺信息
-func (ac *adminService) SelectShop(admin *models.Admin) ( adminListandCount *utils.ListAndCount,err  error) {
-	if admin.ID == 1 {
-		adminListandCount, err = dao.NewAdminDao(ac.db).GetShops(admin)
-		return 
-	} else {
-		adminListandCount, err = dao.NewAdminDao(ac.db).GetShopByID(admin.ID)
-	}
-	return 
-}
-
 // 删除商铺
 func (ac *adminService) DeleteShop(AdminID int64) (err error) {
 	isOk, err := dao.NewAdminDao(ac.db).DeleteShopByID(AdminID)
@@ -87,5 +76,16 @@ func (ac *adminService) UpdateShop(Admin *models.Admin) (err error) {
 	id := Admin.ID
 	Admin.ID = 0 //清空主键
 	err = dao.NewAdminDao(ac.db).UpdateShopByID(id, Admin)
+	return
+}
+
+//查询商铺信息
+func (ac *adminService) SelectShop(admin *models.Admin) (adminListandCount *utils.ListAndCount, err error) {
+	if admin.ID == 0 {
+		adminListandCount, err = dao.NewAdminDao(ac.db).GetShops(admin)
+		return
+	} else {
+		adminListandCount, err = dao.NewAdminDao(ac.db).GetShopByID(admin.ID)
+	}
 	return
 }

@@ -1,0 +1,109 @@
+{
+  "type": "page",
+  "title": "秒杀活动管理",
+  "body": [
+    {
+      "type": "crud",
+      "api": {
+        "url": "/activity/select",
+        "method": "POST",
+        "dataType": "form"
+      },
+      "filter": {
+        "title": "条件搜索",
+        "body": [
+          {
+            "type": "input-text",
+            "name": "id",
+            "label": "秒杀活动ID"
+          },
+          {
+            "type": "input-text",
+            "name": "name",
+            "label": "秒杀商品名称"
+          },
+          {
+            "type": "radios",
+            "name": "flag",
+            "options": [
+              {
+                "label": "未激活",
+                "value": 0
+              },
+              {
+                "label": "已删除",
+                "value": 1
+              },
+              {
+                "label": "秒杀活动中",
+                "value": 2
+              }
+            ],
+            "submitOnChange": true,
+            "value": 0
+          }
+        ],
+        "autoFocus": false
+      },
+      "columns": [
+        {
+          "name": "id",
+          "label": "秒杀活动ID",
+          "type": "text"
+        },
+        {
+          "name": "name",
+          "label": "秒杀商品名称",
+          "type": "text"
+        },
+        {
+          "type": "text",
+          "label": "秒杀商品数量",
+          "name": "product_num"
+        },
+        {
+          "type": "text",
+          "label": "秒杀优惠价格",
+          "name": "product_price"
+        },
+        {
+          "type": "text",
+          "label": "秒杀活动持续时间",
+          "name": "last"
+        },
+        {
+          "type": "operation",
+          "label": "操作",
+          "buttons": [
+            {
+              "type": "button",
+              "label": "删除",
+              "actionType": "ajax",
+              "level": "link",
+              "className": "text-danger",
+              "confirmText": "确定要删除？",
+              "api": {
+                "url": "/activity/delete?id=${id}",
+                "method": "GET"
+              },
+              "visibleOn": "${flag==0}"
+            }
+          ]
+        }
+      ],
+      "headerToolbar": [
+        "switch-per-page"
+      ],
+      "perPageAvailable": [
+        10,
+        20,
+        50
+      ],
+      "mode": "table",
+      "footerToolbar": [
+        "statistics",
+        "pagination"
+      ]
+    }
+  ]
+}
