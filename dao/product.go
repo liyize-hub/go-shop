@@ -5,6 +5,7 @@ import (
 	"go-shop/datasource"
 	"go-shop/models"
 	"go-shop/utils"
+	"time"
 
 	"go.uber.org/zap"
 	"xorm.io/xorm"
@@ -28,9 +29,6 @@ func NewProductDao(db *xorm.Engine) *ProductDao {
 }
 
 func (d *ProductDao) AddProduct(product *models.Product) (err error) {
-	if product.Num == 0 || product.Price == 0 {
-		return errors.New("插入的商品数量或者价格为0")
-	}
 	count, err := d.Insert(product)
 	if err != nil {
 		utils.Logger.Error("插入失败", zap.Any("product", product))
@@ -68,7 +66,16 @@ func (d *ProductDao) UpdateProductByID(productID int64, product *models.Product)
 func (d *ProductDao) GetProducts(product *models.Product) (*utils.ListAndCount, error) {
 	products := make(map[int64]*models.Product)
 	pro := []*models.Product{}
-	err := d.MustCols("flag").Limit(product.Size, (product.No-1)*product.Size).Asc("id").Find(products, product) // 返回值，条件
+	sess := d.MustCols("flag").Limit(product.Size, (product.No-1)*product.Size).Asc("id")
+
+	//时间范围
+	if len(product.TimeRange) != 0 {
+		first := time.Unix(product.TimeRange[0], 0).Format("2006-01-02 15:04:05")
+		last := time.Unix(product.TimeRange[1], 0).Format("2006-01-02 15:04:05")
+		sess = sess.Where("create_time between ? and ?", first, last)
+	}
+
+	err := sess.Find(products, product) // 返回值，条件
 	if err != nil {
 		utils.Logger.Error("查询失败", zap.Any("product", product))
 		return nil, err

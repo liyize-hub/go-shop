@@ -14,6 +14,7 @@ type Admin struct {
 	ShopDetail  string     `json:"shop_detail" form:"shop_detail" xorm:"varchar(255)"`  //商铺简介
 	ShopType    int        `json:"shop_type" form:"shop_type"`                          //商铺经营类型
 	CreateTime  time.Time  `json:"create_time" form:"create_time" xorm:"created"`
+	TimeRange   []int64    `json:"time_range" form:"time_range" xorm:"-"`        //时间范围
 	Flag        int        `json:"flag" form:"flag" xorm:"tinyint(1) default 0"` //管理员状态 0为未激活，1为有效 2为被封禁 3 为被删除
 	Pages       `xorm:"-"` //分页情况
 }

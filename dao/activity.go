@@ -28,8 +28,8 @@ func NewActivityDao(db *xorm.Engine) *ActivityDao {
 }
 
 func (a *ActivityDao) AddActivity(activity *models.Activity) (err error) {
-	if activity.Num == 0 || activity.Price == 0 || activity.Last == 0 {
-		return errors.New("插入的秒杀活动的商品的数量或者价格为0或者持续时间为0")
+	if activity.Num == 0 || activity.Price == 0 || activity.Last == 0 || activity.ProductID == 0 {
+		return errors.New("插入的秒杀活动的商品的数量或者价格为0或者持续时间为0或者ID为0")
 	}
 	count, err := a.Insert(activity)
 	if err != nil {

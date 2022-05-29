@@ -2,14 +2,12 @@ package main
 
 import (
 	"go-shop/config"
-	"go-shop/middleware"
 	"go-shop/router"
 	"go-shop/utils"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/logger"
 	"github.com/kataras/iris/v12/middleware/recover"
-	"go.uber.org/zap"
 )
 
 func main() {
@@ -48,27 +46,6 @@ func newApp() *iris.Application {
 	//3. 注册视图文件
 	template := iris.HTML("./background", ".html") //.Layout("login.html").Reload(true)
 	app.RegisterView(template)
-	app.Get("/", func(ctx iris.Context) {
-		ctx.View("login.html")
-	})
-
-	app.Get("/background", func(ctx iris.Context) {
-		uid := ctx.GetCookie("uid")
-
-		if uid == "1" {
-			utils.Logger.Info("超级管理员登录！", zap.String("uid", uid))
-			ctx.View("index_root.html")
-			return
-		} else {
-			utils.Logger.Info("商铺管理员登录！", zap.String("uid", uid))
-			ctx.View("index.html")
-			return
-		}
-	}).Use(middleware.AuthConProduct)
-
-	app.Get("/test", func(ctx iris.Context) {
-		ctx.WriteString("test")
-	})
 
 	//4. 注册静态资源
 	app.HandleDir("/static", "./background/static")

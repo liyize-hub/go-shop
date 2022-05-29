@@ -6,6 +6,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/kataras/iris/v12 v12.2.0-alpha9
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/tencentyun/cos-go-sdk-v5 v0.7.35
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20220513210258-46612604a0f9
 	xorm.io/core v0.7.3
@@ -22,6 +23,7 @@ require (
 	github.com/aymerick/raymond v2.0.3-0.20180322193309-b565731e1464+incompatible // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/clbanning/mxj v1.8.4 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/eknkc/amber v0.0.0-20171010120322-cdade1c07385 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
@@ -32,6 +34,7 @@ require (
 	github.com/gobwas/ws v1.1.0 // indirect
 	github.com/goccy/go-json v0.9.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
@@ -52,8 +55,10 @@ require (
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mediocregopher/radix/v3 v3.8.0 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.18 // indirect
+	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/mozillazg/go-httpheader v0.2.1 // indirect
 	github.com/nats-io/nats.go v1.13.1-0.20220121202836-972a071d373d // indirect
 	github.com/nats-io/nkeys v0.3.0 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect

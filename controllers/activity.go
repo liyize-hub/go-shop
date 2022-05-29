@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"go-shop/models"
 	"go-shop/services"
 	"go-shop/utils"
@@ -13,7 +12,7 @@ import (
 )
 
 type ActivityController struct {
-	Ctx     iris.Context            // iris框架自动为每个请求都绑定上下文对象
+	Ctx     iris.Context             // iris框架自动为每个请求都绑定上下文对象
 	Service services.ActivityService // Activity功能实体
 }
 
@@ -31,7 +30,6 @@ func (p *ActivityController) PostAdd() {
 	if err != nil {
 		utils.Logger.Error("ReadForm error", zap.Any("err", err))
 	}
-	fmt.Println()
 	//从cookie中获取具体商铺
 	uid := p.Ctx.GetCookie("uid")
 	if uid != "1" {
@@ -78,7 +76,7 @@ func (p *ActivityController) GetDelete() {
  * 接口：/activity/update
  * 方法：post
  */
- func (p *ActivityController) PostUpdate() {
+func (p *ActivityController) PostUpdate() {
 	p.Ctx.Application().Logger().Info(" update Activity ")
 	utils.Logger.Info("更新秒杀活动")
 	var activity models.Activity
@@ -98,7 +96,6 @@ func (p *ActivityController) GetDelete() {
 		utils.Logger.Error("UpdateActivity error", zap.Any("err", err))
 	}
 	utils.Logger.Info("更新成功", zap.Any("Activity", activity))
-	//p.Ctx.Redirect("/Activity/all") //跳转页面
 }
 
 /**
@@ -110,12 +107,12 @@ func (p *ActivityController) GetAll() mvc.Result {
 	p.Ctx.Application().Logger().Info(" get all Activity start")
 	utils.Logger.Info("开始获取全部秒杀活动")
 
-	ActivityListandCount, err := p.Service.SelectAllActivity()
+	activityListandCount, err := p.Service.SelectAllActivity()
 	if err != nil {
 		return utils.NewJSONResponse(models.ErrorCode.ERROR, "SelectAllActivity err", nil)
 	}
 
-	return utils.NewJSONResponse(models.ErrorCode.SUCCESS, "查询成功", ActivityListandCount)
+	return utils.NewJSONResponse(models.ErrorCode.SUCCESS, "查询成功", activityListandCount)
 }
 
 /**
@@ -127,10 +124,10 @@ func (p *ActivityController) PostSelect() mvc.Result {
 	p.Ctx.Application().Logger().Info(" search Activity start")
 	utils.Logger.Info("开始查询秒杀活动")
 	var (
-		Activity models.Activity
+		activity models.Activity
 	)
 
-	err := p.Ctx.ReadForm(&Activity)
+	err := p.Ctx.ReadForm(&activity)
 	if err != nil {
 		utils.Logger.Error("ReadForm error", zap.Any("err", err))
 		return utils.NewJSONResponse(models.ErrorCode.ERROR, "ReadForm error", nil)
@@ -139,15 +136,14 @@ func (p *ActivityController) PostSelect() mvc.Result {
 	//从cookie中获取具体商铺
 	uid := p.Ctx.GetCookie("uid")
 	if uid != "1" {
-		Activity.ShopID, _ = strconv.ParseInt(uid, 10, 64)
+		activity.ShopID, _ = strconv.ParseInt(uid, 10, 64)
 	}
 
-	ActivityListandCount, err := p.Service.SelectActivitys(&Activity)
+	activityListandCount, err := p.Service.SelectActivitys(&activity)
 	if err != nil {
 		utils.Logger.Error("SelectActivity error", zap.Any("err", err))
 		return utils.NewJSONResponse(models.ErrorCode.ERROR, err.Error(), nil)
 	}
 
-	return utils.NewJSONResponse(models.ErrorCode.SUCCESS, "查询成功", ActivityListandCount)
+	return utils.NewJSONResponse(models.ErrorCode.SUCCESS, "查询成功", activityListandCount)
 }
-

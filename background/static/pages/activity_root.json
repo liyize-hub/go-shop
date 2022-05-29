@@ -88,6 +88,11 @@
           "type": "text"
         },
         {
+          "name": "img",
+          "label": "秒杀商品图片",
+          "type": "image"
+        },
+        {
           "type": "text",
           "label": "秒杀商品数量",
           "name": "product_num"
@@ -96,6 +101,11 @@
           "type": "text",
           "label": "秒杀优惠价格",
           "name": "product_price"
+        },
+        {
+          "type": "text",
+          "label": "秒杀商品原价",
+          "name": "price"
         },
         {
           "type": "text",
@@ -157,13 +167,13 @@
                       },
                       {
                         "type": "input-text",
-                        "label": "秒杀活动商品数量",
+                        "label": "秒杀商品数量",
                         "name": "product_num",
                         "required": true,
                         "hint": "大于0"
                       },
                       {
-                        "label": "秒杀活动商品价格",
+                        "label": "秒杀优惠价格",
                         "type": "input-text",
                         "name": "product_price",
                         "required": true,

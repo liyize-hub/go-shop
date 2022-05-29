@@ -55,11 +55,12 @@
           },
           {
             "type": "input-text",
-            "label": "库存数量",
-            "name": "num"
+            "name": "num",
+            "label": "库存数量"
           },
           {
             "type": "select",
+            "label": "商品类型",
             "name": "category",
             "options": [
               {
@@ -122,14 +123,13 @@
                 "label": "母婴玩具",
                 "value": "15"
               }
-            ],
-            "label": "商品类型"
+            ]
           },
           {
-            "type": "input-datetime",
-            "name": "create_time",
-            "label": "上架时间",
-            "id": "u:9496af3695f9"
+            "type": "input-datetime-range",
+            "name": "time_range",
+            "label": "上架日期范围",
+            "ranges": "today,yesterday,1dayago,7daysago,prevweek,thismonth,prevmonth"
           },
           {
             "type": "radios",
@@ -140,7 +140,7 @@
                 "value": 0
               },
               {
-                "label": "已删除",
+                "label": "被删除",
                 "value": 1
               }
             ],
@@ -159,7 +159,7 @@
         {
           "name": "img",
           "label": "商品图片",
-          "type": "text"
+          "type": "image"
         },
         {
           "type": "text",
@@ -204,6 +204,121 @@
           "label": "操作",
           "buttons": [
             {
+              "label": "添加秒杀活动",
+              "type": "button",
+              "actionType": "dialog",
+              "level": "warning",
+              "dialog": {
+                "title": "秒杀活动",
+                "body": [
+                  {
+                    "type": "form",
+                    "api": {
+                      "url": "/activity/add",
+                      "method": "POST",
+                      "dataType": "form"
+                    },
+                    "rules": [
+                      {
+                        "rule": "${product_id == id}",
+                        "message": "商品的id错误",
+                        "name": [
+                          "product_id"
+                        ]
+                      },
+                      {
+                        "rule": "${product_num <= num}",
+                        "message": "参与秒杀商品数量不能超过已上架商品数量",
+                        "name": [
+                          "product_num"
+                        ]
+                      },
+                      {
+                        "rule": "${product_price < price}",
+                        "message": "参与秒杀商品价格必须小于已上架商品价格",
+                        "name": [
+                          "product_price"
+                        ]
+                      },
+                      {
+                        "rule": "${product_num != 0}",
+                        "message": "商品的数量不能为0",
+                        "name": [
+                          "product_num"
+                        ]
+                      },
+                      {
+                        "rule": "${product_num != 0}",
+                        "message": "商品的价格不能为0",
+                        "name": [
+                          "product_price"
+                        ]
+                      },
+                      {
+                        "rule": "${last>0 && last<24}",
+                        "message": "持续时间在一天内",
+                        "name": [
+                          "last"
+                        ]
+                      }
+                    ],
+                    "body": [
+                      {
+                        "type": "input-text",
+                        "label": "商品ID",
+                        "name": "product_id",
+                        "required": true,
+                        "hint": "id为: $id"
+                      },
+                      {
+                        "type": "static",
+                        "label": "所属商铺ID",
+                        "name": "shop_id"
+                      },
+                      {
+                        "type": "static",
+                        "label": "商品名称",
+                        "name": "name"
+                      },
+                      {
+                        "type": "static",
+                        "label": "商品原价",
+                        "name": "price"
+                      },
+                      {
+                        "type": "static",
+                        "label": "商品图片",
+                        "name": "img"
+                      },
+                      {
+                        "type": "input-text",
+                        "label": "秒杀活动商品数量",
+                        "name": "product_num",
+                        "required": true,
+                        "hint": "不能超过$num个,大于0"
+                      },
+                      {
+                        "label": "秒杀活动商品价格",
+                        "type": "input-text",
+                        "name": "product_price",
+                        "required": true,
+                        "hint": "必须小于$price元,大于0"
+                      },
+                      {
+                        "label": "秒杀活动持续时间",
+                        "type": "input-text",
+                        "name": "last",
+                        "required": true,
+                        "hint": "单位为小时,必须为整数,大于0,小于24"
+                      }
+                    ]
+                  }
+                ],
+                "type": "dialog"
+              },
+              "visibleOn": "${flag==0}"
+            },
+            {
               "label": "编辑",
               "type": "button",
               "actionType": "dialog",
@@ -217,6 +332,22 @@
                     "method": "POST",
                     "dataType": "form"
                   },
+                  "rules": [
+                    {
+                      "rule": "${num != 0}",
+                      "message": "商品的数量不能为0",
+                      "name": [
+                        "num"
+                      ]
+                    },
+                    {
+                      "rule": "${price != 0}",
+                      "message": "商品的价格不能为0",
+                      "name": [
+                        "price"
+                      ]
+                    }
+                  ],
                   "body": [
                     {
                       "type": "static",
@@ -224,9 +355,42 @@
                       "label": "商品ID"
                     },
                     {
+                      "type": "select",
+                      "name": "shop_id",
+                      "label": "商铺名",
+                      "required": true,
+                      "options": [
+                        {
+                          "label": "家和超市",
+                          "value": "2"
+                        },
+                        {
+                          "label": "信誉楼",
+                          "value": "3"
+                        },
+                        {
+                          "label": "欢欢菜店",
+                          "value": "4"
+                        },
+                        {
+                          "label": "维品服饰",
+                          "value": "5"
+                        },
+                        {
+                          "label": "海丰电子",
+                          "value": "6"
+                        },
+                        {
+                          "label": "晨光书店",
+                          "value": "7"
+                        }
+                      ]
+                    },
+                    {
                       "label": "是否有效",
                       "type": "select",
                       "name": "flag",
+                      "required": true,
                       "options": [
                         {
                           "label": "有效",
@@ -241,26 +405,33 @@
                     {
                       "type": "input-text",
                       "name": "name",
+                      "required": true,
                       "label": "商品名称"
                     },
                     {
                       "label": "库存数量",
                       "type": "input-text",
-                      "name": "num"
+                      "name": "num",
+                      "required": true,
+                      "hint": "商品的数量不能为0"
                     },
                     {
                       "label": "商品价格",
                       "type": "input-text",
-                      "name": "price"
+                      "name": "price",
+                      "required": true,
+                      "hint": "商品的价格不能为0"
                     },
                     {
                       "label": "商品简介",
                       "type": "input-text",
-                      "name": "detail"
+                      "name": "detail",
+                      "required": true
                     },
                     {
                       "label": "商品类型",
                       "type": "select",
+                      "required": true,
                       "name": "category",
                       "options": [
                         {
@@ -324,6 +495,13 @@
                           "value": "15"
                         }
                       ]
+                    },
+                    {
+                      "type": "input-image",
+                      "name": "img",
+                      "label": "商品图片: 只支持.jpg,.png,.jpeg格式的图片",
+                      "receiver": "/uploadimg",
+                      "required": true
                     }
                   ]
                 }
@@ -344,6 +522,11 @@
                     "dataType": "form"
                   },
                   "body": [
+                    {
+                      "name": "img",
+                      "label": "商品图片",
+                      "type": "image"
+                    },
                     {
                       "type": "static",
                       "label": "商品名",
@@ -385,19 +568,19 @@
               "actionType": "ajax",
               "confirmText": "确定要恢复？",
               "api": {
-                  "url": "/product/update",
-                  "method": "POST",
-                  "dataType": "form",
-                  "data": {
-                      "id": "${id}",
-                      "flag": 0
-                  }
+                "url": "/product/update",
+                "method": "POST",
+                "dataType": "form",
+                "data": {
+                  "id": "${id}",
+                  "flag": 0
+                }
               },
               "placeholder": "-",
               "size": "sm",
               "level": "default",
               "visibleOn": "${flag==1}"
-          }
+            }
           ]
         }
       ],
@@ -418,7 +601,55 @@
                   "method": "POST",
                   "dataType": "form"
                 },
+                "rules": [
+                  {
+                    "rule": "${num != 0}",
+                    "message": "商品的数量不能为0",
+                    "name": [
+                      "num"
+                    ]
+                  },
+                  {
+                    "rule": "${price != 0}",
+                    "message": "商品的价格不能为0",
+                    "name": [
+                      "price"
+                    ]
+                  }
+                ],
                 "body": [
+                  {
+                    "type": "select",
+                    "name": "shop_id",
+                    "label": "商铺名",
+                    "required": true,
+                    "options": [
+                      {
+                        "label": "家和超市",
+                        "value": "2"
+                      },
+                      {
+                        "label": "信誉楼",
+                        "value": "3"
+                      },
+                      {
+                        "label": "欢欢菜店",
+                        "value": "4"
+                      },
+                      {
+                        "label": "维品服饰",
+                        "value": "5"
+                      },
+                      {
+                        "label": "海丰电子",
+                        "value": "6"
+                      },
+                      {
+                        "label": "晨光书店",
+                        "value": "7"
+                      }
+                    ]
+                  },
                   {
                     "type": "input-text",
                     "name": "name",
@@ -497,49 +728,27 @@
                     "type": "input-text",
                     "name": "num",
                     "label": "商品数量",
-                    "required": true
+                    "required": true,
+                    "hint": "商品的数量不能为0"
                   },
                   {
                     "type": "input-text",
                     "name": "price",
                     "label": "商品价格",
-                    "required": true
+                    "required": true,
+                    "hint": "商品的价格不能为0"
                   },
                   {
                     "type": "input-text",
-                    "label": "商品描述",
-                    "name": "detail"
+                    "label": "商品简介",
+                    "name": "detail",
+                    "required": true
                   },
                   {
-                    "type": "select",
-                    "label": "所属商铺",
-                    "name": "shop_id",
-                    "options": [
-                      {
-                        "label": "家和超市",
-                        "value": "2"
-                      },
-                      {
-                        "label": "信誉楼",
-                        "value": "3"
-                      },
-                      {
-                        "label": "欢欢菜店",
-                        "value": "4"
-                      },
-                      {
-                        "label": "维品服饰",
-                        "value": "5"
-                      },
-                      {
-                        "label": "海丰电子",
-                        "value": "6"
-                      },
-                      {
-                        "label": "晨光书店",
-                        "value": "6"
-                      }
-                    ],
+                    "type": "input-image",
+                    "name": "img",
+                    "label": "商品图片: 只支持.jpg,.png,.jpeg格式的图片",
+                    "receiver": "/uploadimg",
                     "required": true
                   }
                 ]

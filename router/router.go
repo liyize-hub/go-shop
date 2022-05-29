@@ -3,6 +3,7 @@ package router
 import (
 	"go-shop/controllers"
 	"go-shop/datasource"
+	"go-shop/middleware"
 	"go-shop/services"
 	"go-shop/utils"
 	"time"
@@ -10,6 +11,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"github.com/kataras/iris/v12/sessions"
+	"go.uber.org/zap"
 )
 
 func Router(app *iris.Application) {
@@ -26,6 +28,33 @@ func Router(app *iris.Application) {
 
 	redis := datasource.NewRedis()
 	sess.UseDatabase(redis)
+
+	//管理员登录页面
+	app.Get("/", func(ctx iris.Context) {
+		ctx.View("login.html")
+	})
+
+	//后台管理页面
+	app.Get("/background", func(ctx iris.Context) {
+		uid := ctx.GetCookie("uid")
+
+		if uid == "1" {
+			utils.Logger.Info("超级管理员登录！", zap.String("uid", uid))
+			ctx.View("index_root.html") //超级管理员后台管理页面
+			return
+		} else {
+			utils.Logger.Info("商铺管理员登录！", zap.String("uid", uid))
+			ctx.View("index.html") //商铺管理员后台管理页面
+			return
+		}
+	}).Use(middleware.AuthConProduct)
+
+	app.Get("/test", func(ctx iris.Context) {
+		ctx.WriteString("test")
+	})
+
+	// 获取图片并上传到腾讯云COS
+	app.Post("/uploadimg", datasource.GeImg)
 
 	// 商品管理模块功能
 	product := mvc.New(app.Party("/product"))
@@ -48,7 +77,7 @@ func Router(app *iris.Application) {
 	)
 	order.Handle(new(controllers.OrderController))
 
-	// 管理员模块功能
+	// 管理员管理模块功能
 	admin := mvc.New(app.Party("/admin"))
 	admin.Register(
 		services.NewAdminService(db),

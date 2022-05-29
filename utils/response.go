@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"go.uber.org/zap"
 )
@@ -32,6 +33,16 @@ func NewJSONResponse(errno int, msg string, data interface{}, url ...string) mvc
 	}
 
 	return mvc.Response{Object: jsonData}
+}
+
+func SendJSON(ctx iris.Context, errno int, msg string, data interface{}) {
+	ctx.JSON(
+		iris.Map{
+			"errNo": errno,
+			"msg":   msg,
+			"data":  data,
+		},
+	)
 }
 
 /*

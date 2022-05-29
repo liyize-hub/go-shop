@@ -20,6 +20,10 @@ type serverConfig struct {
 	Port      string
 	SessionID string //后台设置的session id
 	Mode      string
+	ImgURL    string //图片cos存储桶地址
+	HtmlURL   string //静态页面cos存储桶地址
+	SecretID  string //腾讯云用户访问密钥ID
+	SecretKey string //腾讯云用户访问密钥Key
 }
 
 var ServerConfig serverConfig
@@ -48,7 +52,7 @@ var DataBaseConfig dataBaseConfig
 
 func initDataBase() {
 	utils.SetStructByJSON(&DataBaseConfig, jsonData["database"].(map[string]interface{}))
-	url := "{user}:{password}@tcp({host}:{port})/{database}?charset={charset}&parseTime=True&loc=Local"
+	url := "{user}:{password}@tcp({host}:{port})/{database}?charset={charset}&loc=Local"
 	url = strings.Replace(url, "{database}", DataBaseConfig.Database, -1)
 	url = strings.Replace(url, "{user}", DataBaseConfig.User, -1)
 	url = strings.Replace(url, "{password}", DataBaseConfig.Pwd, -1)
