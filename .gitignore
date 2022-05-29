@@ -34,3 +34,4 @@ yarn.lock
 project.private.config.json
 .eslintcache
 wechat
+conf.json

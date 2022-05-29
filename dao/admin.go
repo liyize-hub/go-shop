@@ -5,6 +5,7 @@ import (
 	"go-shop/datasource"
 	"go-shop/models"
 	"go-shop/utils"
+	"time"
 
 	"go.uber.org/zap"
 	"xorm.io/xorm"
@@ -80,12 +81,21 @@ func (d *AdminDao) GetAdmin(admin *models.Admin) (*models.Admin, error) {
 func (d *AdminDao) GetShops(admin *models.Admin) (*utils.ListAndCount, error) {
 	admins := make(map[int64]*models.Admin)
 	ad := []*models.Admin{}
-	err := d.MustCols("flag").Limit(admin.Size, (admin.No-1)*admin.Size).Asc("id").Find(admins, admin) // 返回值，条件
+	sess := d.MustCols("flag").Limit(admin.Size, (admin.No-1)*admin.Size).Asc("id")
+
+	//时间范围
+	if len(admin.TimeRange) != 0 {
+		first := time.Unix(admin.TimeRange[0], 0).Format("2006-01-02 15:04:05")
+		last := time.Unix(admin.TimeRange[1], 0).Format("2006-01-02 15:04:05")
+		sess = sess.Where("create_time between ? and ?", first, last)
+	}
+
+	err := sess.Find(admins, admin) // 返回值，条件
 	if err != nil {
 		utils.Logger.Error("查询失败", zap.Any("Admin", admin))
 		return nil, err
 	}
-	
+
 	for _, v := range admins {
 		if v.ID != 1 { //过滤超级管理员id=1
 			ad = append(ad, v)

@@ -3,7 +3,11 @@
         "AppName": "go-shop",
         "LogLevel": "debug",
         "Port": "8080",
-        "Mode": "dev"
+        "Mode": "dev",
+        "ImgURL": "https://go-shop-img-1311006175.cos.ap-beijing.myqcloud.com",
+        "HtmlURL": "",
+        "SecretID": "AKIDc3D7k6ByVmmVw6zbw1pLaZGgpiKhndCU",
+        "SecretKey": "1lEQLyLQEl11kCMGtEI6dsqXx6xXrte8"
     },
     "database": {
         "Drive": "mysql",

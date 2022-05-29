@@ -29,6 +29,7 @@ func (p *ProductController) PostAdd() {
 	err := p.Ctx.ReadForm(&product)
 	if err != nil {
 		utils.Logger.Error("ReadForm error", zap.Any("err", err))
+		return
 	}
 
 	//从cookie中获取具体商铺
@@ -40,6 +41,7 @@ func (p *ProductController) PostAdd() {
 	err = p.Service.InsertProduct(&product)
 	if err != nil {
 		utils.Logger.Error("InsertProduct error", zap.Any("err", err))
+		return
 	}
 
 	utils.Logger.Info("插入商品成功", zap.Any("Product", product))

@@ -1,226 +1,239 @@
 {
-    "type": "page",
-    "title": "商铺信息",
-    "body": [
-      {
-        "type": "crud",
-        "api": {
-          "url": "/admin/select",
-          "method": "POST",
-          "dataType": "form"
+  "type": "page",
+  "title": "商铺信息",
+  "body": [
+    {
+      "type": "crud",
+      "api": {
+        "url": "/admin/select",
+        "method": "POST",
+        "dataType": "form"
+      },
+      "mode": "cards",
+      "card": {
+        "header": {
+          "title": "$shop_name",
+          "subTitle": "$shop_detail",
+          "subTitlePlaceholder": "暂无说明",
+          "avatar": "<%= data.shop_img %>",
+          "avatarClassName": "pull-left thumb b-3x m-r"
         },
-        "mode": "cards",
-        "card": {
-          "header": {
-            "title": "$shop_name",
-            "subTitle": "$shop_detail",
-            "subTitlePlaceholder": "暂无说明",
-            "avatar": "<%= data.avatar || \"https://internal-amis-res.cdn.bcebos.com/images/2019-12/1575350573496/4873dbfaf6a5.png\" %>",
-            "avatarClassName": "pull-left thumb b-3x m-r"
+        "actions": [
+          {
+            "label": "查看",
+            "type": "button",
+            "actionType": "dialog",
+            "level": "link",
+            "dialog": {
+              "title": "查看商铺详情",
+              "body": {
+                "type": "form",
+                "api": {
+                  "url": "/admin/select",
+                  "method": "POST",
+                  "dataType": "form"
+                },
+                "body": [
+                  {
+                    "name": "shop_img",
+                    "label": "商铺图片",
+                    "type": "image"
+                  },
+                  {
+                    "type": "static",
+                    "label": "商铺ID",
+                    "name": "id"
+                  },
+                  {
+                    "type": "divider"
+                  },
+                  {
+                    "type": "static",
+                    "label": "商铺管理员姓名",
+                    "name": "name"
+                  },
+                  {
+                    "type": "static",
+                    "label": "商家电话",
+                    "name": "phone"
+                  },
+                  {
+                    "type": "static",
+                    "label": "商铺地址",
+                    "name": "shop_address"
+                  },
+                  {
+                    "type": "static",
+                    "label": "商铺简介",
+                    "name": "shop_detail"
+                  },
+                  {
+                    "type": "static",
+                    "label": "商铺开店时间",
+                    "name": "create_time"
+                  }
+                ]
+              }
+            }
           },
-          "actions": [
-            {
-              "label": "查看",
-              "type": "button",
-              "actionType": "dialog",
-              "level": "link",
-              "dialog": {
-                "title": "查看商铺详情",
-                "body": {
-                  "type": "form",
-                  "api": {
-                    "url": "/admin/select",
-                    "method": "POST",
-                    "dataType": "form"
+          {
+            "label": "编辑",
+            "type": "button",
+            "actionType": "dialog",
+            "level": "link",
+            "dialog": {
+              "title": "编辑",
+              "body": {
+                "type": "form",
+                "api": {
+                  "url": "/admin/update",
+                  "method": "POST",
+                  "dataType": "form"
+                },
+                "body": [
+                  {
+                    "type": "static",
+                    "name": "id",
+                    "label": "商铺ID"
                   },
-                  "body": [
-                    {
-                      "type": "static",
-                      "label": "商铺ID",
-                      "name": "id"
-                    },
-                    {
-                      "type": "divider"
-                    },
-                    {
-                      "type": "static",
-                      "label": "商铺管理员姓名",
-                      "name": "name"
-                    },
-                    {
-                      "type": "static",
-                      "label": "商家电话",
-                      "name": "phone"
-                    },
-                    {
-                      "type": "static",
-                      "label": "商铺地址",
-                      "name": "shop_address"
-                    },
-                    {
-                      "type": "static",
-                      "label": "商铺简介",
-                      "name": "shop_detail"
-                    },
-                    {
-                      "type": "static",
-                      "label": "商铺开店时间",
-                      "name": "create_time"
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "label": "编辑",
-              "type": "button",
-              "actionType": "dialog",
-              "level": "link",
-              "dialog": {
-                "title": "编辑",
-                "body": {
-                  "type": "form",
-                  "api": {
-                    "url": "/admin/update",
-                    "method": "POST",
-                    "dataType": "form"
+                  {
+                    "type": "input-text",
+                    "name": "name",
+                    "label": "管理员名称",
+                    "required": true
                   },
-                  "body": [
-                    {
-                      "type": "static",
-                      "name": "id",
-                      "label": "商铺ID"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "name",
-                      "label": "管理员名称"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "phone",
-                      "label": "商家电话"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "shop_address",
-                      "label": "商铺地址"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "shop_name",
-                      "label": "商铺名称"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "shop_detail",
-                      "label": "商铺简介"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "shop_img",
-                      "label": "商铺图片"
-                    },
-                    {
-                      "label": "商铺经营类型",
-                      "type": "select",
-                      "name": "shop_type",
-                      "options": [
-                        {
-                          "label": "综合性超市",
-                          "value": 1
-                        },
-                        {
-                          "label": "数码产品",
-                          "value": "2"
-                        },
-                        {
-                          "label": "办公书籍",
-                          "value": "3"
-                        },
-                        {
-                          "label": "服装服饰",
-                          "value": "4"
-                        },
-                        {
-                          "label": "大型商场",
-                          "value": "5"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            },
-            {
-              "type": "button",
-              "label": "注销",
-              "actionType": "ajax",
-              "level": "link",
-              "className": "text-danger",
-              "confirmText": "确定要注销？",
-              "api": {
-                "url": "/admin/delete?id=${id}",
-                "method": "GET"
-              }
-            },
-            {
-              "type": "button",
-              "label": "恢复",
-              "actionType": "ajax",
-              "confirmText": "确定要恢复？",
-              "api": {
-                "url": "/admin/update",
-                "method": "POST",
-                "dataType": "form",
-                "data": {
-                  "id": "${id}",
-                  "flag": 1
-                }
-              },
-              "placeholder": "-",
-              "size": "sm",
-              "level": "default"
-            }
-          ],
-          "body": [
-            {
-              "name": "id",
-              "label": "商铺ID",
-              "type": "text"
-            },
-            {
-              "name": "shop_name",
-              "label": "商铺名",
-              "type": "text"
-            },
-            {
-              "type": "mapping",
-              "label": "商铺类型",
-              "name": "shop_type",
-              "map": {
-                "1": "综合性超市",
-                "2": "数码产品",
-                "3": "办公书籍",
-                "4": "服装服饰",
-                "5": "大型商场",
-                "*": "未知"
-              }
-            },
-            {
-              "type": "mapping",
-              "label": "商铺状态",
-              "name": "flag",
-              "map": {
-                "0": "<span class='label label-info'>未激活</span>",
-                "1": "<span class='label label-success'>正常</span>",
-                "2": "<span class='label label-danger'>封禁</span>",
-                "3": "<span class='label label-default'>注销</span>",
-                "*": "无"
+                  {
+                    "type": "input-text",
+                    "name": "phone",
+                    "label": "商家电话",
+                    "required": true
+                  },
+                  {
+                    "type": "input-text",
+                    "name": "shop_address",
+                    "label": "商铺地址",
+                    "required": true
+                  },
+                  {
+                    "type": "input-text",
+                    "name": "shop_name",
+                    "label": "商铺名称",
+                    "required": true
+                  },
+                  {
+                    "type": "input-text",
+                    "name": "shop_detail",
+                    "label": "商铺简介",
+                    "required": true
+                  },
+                  {
+                    "label": "商铺经营类型",
+                    "type": "select",
+                    "required": true,
+                    "name": "shop_type",
+                    "options": [
+                      {
+                        "label": "综合性超市",
+                        "value": 1
+                      },
+                      {
+                        "label": "数码产品",
+                        "value": "2"
+                      },
+                      {
+                        "label": "办公书籍",
+                        "value": "3"
+                      },
+                      {
+                        "label": "服装服饰",
+                        "value": "4"
+                      },
+                      {
+                        "label": "大型商场",
+                        "value": "5"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "input-image",
+                    "name": "shop_img",
+                    "label": "商铺图片: 只支持.jpg,.png,.jpeg格式的图片",
+                    "receiver": "/uploadimg",
+                    "required": true
+                  }
+                ]
               }
             }
-          ]
-        }
+          },
+          {
+            "type": "button",
+            "label": "注销",
+            "actionType": "ajax",
+            "level": "link",
+            "className": "text-danger",
+            "confirmText": "确定要注销？",
+            "api": {
+              "url": "/admin/delete?id=${id}",
+              "method": "GET"
+            }
+          },
+          {
+            "type": "button",
+            "label": "恢复",
+            "actionType": "ajax",
+            "confirmText": "确定要恢复？",
+            "api": {
+              "url": "/admin/update",
+              "method": "POST",
+              "dataType": "form",
+              "data": {
+                "id": "${id}",
+                "flag": 1
+              }
+            },
+            "placeholder": "-",
+            "size": "sm",
+            "level": "default"
+          }
+        ],
+        "body": [
+          {
+            "name": "id",
+            "label": "商铺ID",
+            "type": "text"
+          },
+          {
+            "name": "shop_name",
+            "label": "商铺名",
+            "type": "text"
+          },
+          {
+            "type": "mapping",
+            "label": "商铺类型",
+            "name": "shop_type",
+            "map": {
+              "1": "综合性超市",
+              "2": "数码产品",
+              "3": "办公书籍",
+              "4": "服装服饰",
+              "5": "大型商场",
+              "*": "未知"
+            }
+          },
+          {
+            "type": "mapping",
+            "label": "商铺状态",
+            "name": "flag",
+            "map": {
+              "0": "<span class='label label-info'>未激活</span>",
+              "1": "<span class='label label-success'>正常</span>",
+              "2": "<span class='label label-danger'>封禁</span>",
+              "3": "<span class='label label-default'>注销</span>",
+              "*": "无"
+            }
+          }
+        ]
       }
-    ]
-  }
+    }
+  ]
+}

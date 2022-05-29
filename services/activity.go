@@ -29,7 +29,7 @@ func NewActivityService(db *xorm.Engine) ActivityService {
 }
 
 func (a *activityService) InsertActivity(activity *models.Activity) (err error) {
-	// 获取商品数量
+	// 获取商品结构体
 	product, err := dao.NewProductDao(a.db).GetProduct(&models.Product{ID: activity.ProductID})
 	if err != nil {
 		return
@@ -64,7 +64,7 @@ func (a *activityService) DeleteActivity(activityID int64) (err error) {
 		utils.SugarLogger.Infof("删除秒杀活动失败,ID为:%d", activityID)
 	}
 
-	// 获取商品ID
+	// 获取秒杀活动结构体
 	activity, err := dao.NewActivityDao(a.db).GetActivity(&models.Activity{ID: activityID})
 	if err != nil {
 		return
@@ -106,6 +106,7 @@ func (a *activityService) SelectAllActivity() (*utils.ListAndCount, error) {
 
 func (a *activityService) SelectActivitys(activity *models.Activity) (*utils.ListAndCount, error) {
 	activityListandCount, err := dao.NewActivityDao(a.db).GetActivitys(activity)
+
 	return activityListandCount, err
 }
 

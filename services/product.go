@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"go-shop/dao"
 	"go-shop/models"
 	"go-shop/utils"
@@ -28,6 +29,10 @@ func NewProductService(db *xorm.Engine) ProductService {
 }
 
 func (p *productService) InsertProduct(product *models.Product) (err error) {
+	if product.Num == 0 || product.Price == 0 {
+		return errors.New("插入的商品数量或者价格为0")
+	}
+
 	err = dao.NewProductDao(p.db).AddProduct(product)
 	return err
 }

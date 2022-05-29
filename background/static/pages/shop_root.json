@@ -50,10 +50,10 @@
                         "label": "商铺经营类型"
                     },
                     {
-                        "type": "input-datetime",
-                        "name": "create_time",
-                        "label": "开店时间",
-                        "id": "u:9496af3695f9"
+                        "type": "input-datetime-range",
+                        "name": "time_range",
+                        "label": "商铺开店日期范围",
+                        "ranges": "today,yesterday,1dayago,7daysago,prevweek,thismonth,prevmonth"
                     },
                     {
                         "type": "radios",
@@ -90,7 +90,7 @@
                 {
                     "name": "shop_img",
                     "label": "商铺图片",
-                    "type": "text"
+                    "type": "image"
                 },
                 {
                     "type": "text",
@@ -138,6 +138,7 @@
                                             "label": "商铺状态",
                                             "type": "select",
                                             "name": "flag",
+                                            "required": true,
                                             "options": [
                                                 {
                                                     "label": "未激活",
@@ -156,22 +157,26 @@
                                         {
                                             "type": "input-text",
                                             "name": "name",
-                                            "label": "管理员名称"
+                                            "label": "管理员名称",
+                                            "required": true
                                         },
                                         {
                                             "type": "input-text",
                                             "name": "phone",
-                                            "label": "商家电话"
+                                            "label": "商家电话",
+                                            "required": true
                                         },
                                         {
                                             "type": "input-text",
                                             "name": "shop_address",
-                                            "label": "商铺地址"
+                                            "label": "商铺地址",
+                                            "required": true
                                         },
                                         {
                                             "type": "input-text",
                                             "name": "shop_name",
-                                            "label": "商铺名称"
+                                            "label": "商铺名称",
+                                            "required": true
                                         },
                                         {
                                             "type": "input-text",
@@ -179,14 +184,10 @@
                                             "label": "商铺简介"
                                         },
                                         {
-                                            "type": "input-text",
-                                            "name": "shop_img",
-                                            "label": "商铺图片"
-                                        },
-                                        {
                                             "label": "商铺经营类型",
                                             "type": "select",
                                             "name": "shop_type",
+                                            "required": true,
                                             "options": [
                                                 {
                                                     "label": "综合性超市",
@@ -209,6 +210,13 @@
                                                     "value": "5"
                                                 }
                                             ]
+                                        },
+                                        {
+                                            "type": "input-image",
+                                            "name": "shop_img",
+                                            "label": "商铺图片: 只支持.jpg,.png,.jpeg格式的图片",
+                                            "receiver": "/uploadimg",
+                                            "required": true
                                         }
                                     ]
                                 }
@@ -229,6 +237,11 @@
                                         "dataType": "form"
                                     },
                                     "body": [
+                                        {
+                                            "name": "shop_img",
+                                            "label": "商铺图片",
+                                            "type": "image"
+                                        },
                                         {
                                             "type": "static",
                                             "label": "商铺ID",
@@ -256,11 +269,6 @@
                                             "type": "static",
                                             "label": "商铺简介",
                                             "name": "shop_detail"
-                                        },
-                                        {
-                                            "type": "static",
-                                            "label": "商铺开店时间",
-                                            "name": "create_time"
                                         }
                                     ]
                                 }

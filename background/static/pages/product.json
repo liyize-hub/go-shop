@@ -95,10 +95,10 @@
             "label": "商品类型"
           },
           {
-            "type": "input-datetime",
-            "name": "create_time",
-            "label": "上架时间",
-            "id": "u:9496af3695f9"
+            "type": "input-datetime-range",
+            "name": "time_range",
+            "label": "上架日期范围",
+            "ranges": "today,yesterday,1dayago,7daysago,prevweek,thismonth,prevmonth"
           },
           {
             "type": "radios",
@@ -128,7 +128,7 @@
         {
           "name": "img",
           "label": "商品图片",
-          "type": "text"
+          "type": "image"
         },
         {
           "type": "text",
@@ -224,8 +224,8 @@
                         ]
                       },
                       {
-                        "rule": "${last != 0}",
-                        "message": "持续时间不能为0",
+                        "rule": "${last>0 && last<24}",
+                        "message": "持续时间在一天内",
                         "name": [
                           "last"
                         ]
@@ -243,6 +243,16 @@
                         "type": "static",
                         "label": "商品名称",
                         "name": "name"
+                      },
+                      {
+                        "type": "static",
+                        "label": "商品原价",
+                        "name": "price"
+                      },
+                      {
+                        "type": "static",
+                        "label": "商品图片",
+                        "name": "img"
                       },
                       {
                         "type": "input-text",
@@ -263,7 +273,7 @@
                         "type": "input-text",
                         "name": "last",
                         "required": true,
-                        "hint": "单位为小时,必须为整数,大于0"
+                        "hint": "单位为小时,必须为整数,大于0,小于24"
                       }
                     ]
                   }
@@ -311,6 +321,7 @@
                     {
                       "label": "是否有效",
                       "type": "select",
+                      "required": true,
                       "name": "flag",
                       "options": [
                         {
@@ -326,28 +337,33 @@
                     {
                       "type": "input-text",
                       "name": "name",
+                      "required": true,
                       "label": "商品名称"
                     },
                     {
                       "label": "库存数量",
                       "type": "input-text",
                       "name": "num",
+                      "required": true,
                       "hint": "商品的数量不能为0"
                     },
                     {
                       "label": "商品价格",
                       "type": "input-text",
                       "name": "price",
+                      "required": true,
                       "hint": "商品的价格不能为0"
                     },
                     {
                       "label": "商品简介",
                       "type": "input-text",
-                      "name": "detail"
+                      "name": "detail",
+                      "required": true
                     },
                     {
                       "label": "商品类型",
                       "type": "select",
+                      "required": true,
                       "name": "category",
                       "options": [
                         {
@@ -411,6 +427,13 @@
                           "value": "15"
                         }
                       ]
+                    },
+                    {
+                      "type": "input-image",
+                      "name": "img",
+                      "label": "商品图片: 只支持.jpg,.png,.jpeg格式的图片",
+                      "receiver": "/uploadimg",
+                      "required": true
                     }
                   ]
                 }
@@ -431,6 +454,11 @@
                     "dataType": "form"
                   },
                   "body": [
+                    {
+                      "name": "img",
+                      "label": "商品图片",
+                      "type": "image"
+                    },
                     {
                       "type": "static",
                       "label": "商品名",
@@ -612,8 +640,16 @@
                   },
                   {
                     "type": "input-text",
-                    "label": "商品描述",
-                    "name": "detail"
+                    "label": "商品简介",
+                    "name": "detail",
+                    "required": true
+                  },
+                  {
+                    "type": "input-image",
+                    "name": "img",
+                    "label": "商品图片:只支持.jpg,.png,.jpeg格式的图片",
+                    "receiver": "/uploadimg",
+                    "required": true
                   }
                 ]
               }
