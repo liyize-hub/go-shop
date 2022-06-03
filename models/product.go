@@ -10,8 +10,9 @@ type Product struct {
 	Img        string     `json:"img" form:"img"`
 	Price      float64    `json:"price" form:"price"`
 	ShopID     int64      `json:"shop_id" form:"shop_id" xorm:"index"`
-	Shop       *Admin     `xorm:"-"`                        //对应的商铺
-	Category   int        `json:"category" form:"category"` //商品类型
+	Shop       *Admin     `xorm:"-"`                              //对应的商铺
+	CategoryID int64      `json:"category_id" form:"category_id"` //商品类型
+	Category   *Category  `xorm:"-"`
 	CreateTime time.Time  `json:"create_time" form:"create_time" xorm:"created"`
 	TimeRange  []int64    `json:"time_range" form:"time_range" xorm:"-"`        //时间范围
 	Detail     string     `json:"detail" form:"detail"`                         //商品简介

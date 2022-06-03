@@ -114,6 +114,7 @@ func (p *ProductController) GetAll() mvc.Result {
 
 	ProductListandCount, err := p.Service.SelectAllProduct()
 	if err != nil {
+		utils.Logger.Error("SelectAllProduct error", zap.Any("err", err))
 		return utils.NewJSONResponse(models.ErrorCode.ERROR, "SelectAllProduct err", nil)
 	}
 

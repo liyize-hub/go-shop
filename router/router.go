@@ -54,7 +54,10 @@ func Router(app *iris.Application) {
 	})
 
 	// 获取图片并上传到腾讯云COS
-	app.Post("/uploadimg", datasource.GeImg)
+	app.Post("/uploadimg", services.GetImg)
+
+	// 商品种类管理模块功能
+	app.Get("/category", services.GetAllCategory)
 
 	// 商品管理模块功能
 	product := mvc.New(app.Party("/product"))

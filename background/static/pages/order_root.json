@@ -60,7 +60,7 @@
             },
             {
               "type": "select",
-              "name": "category",
+              "name": "category_id",
               "options": [
                 {
                   "label": "新鲜果蔬",
@@ -169,7 +169,7 @@
           {
             "type": "mapping",
             "label": "商品类型",
-            "name": "category",
+            "name": "category_id",
             "map": {
               "1": "新鲜果蔬",
               "2": "禽肉蛋奶",
@@ -261,7 +261,7 @@
                       {
                         "label": "商品类型",
                         "type": "select",
-                        "name": "category",
+                        "name": "category_id",
                         "options": [
                           {
                             "label": "新鲜果蔬",
@@ -427,7 +427,7 @@
                     },
                     {
                       "type": "select",
-                      "name": "category",
+                      "name": "category_id",
                       "label": "商品类型",
                       "options": [
                         {

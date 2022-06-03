@@ -64,9 +64,14 @@ func (d *ProductDao) UpdateProductByID(productID int64, product *models.Product)
 
 // 获取多个数据
 func (d *ProductDao) GetProducts(product *models.Product) (*utils.ListAndCount, error) {
-	products := make(map[int64]*models.Product)
-	pro := []*models.Product{}
-	sess := d.MustCols("flag").Limit(product.Size, (product.No-1)*product.Size).Asc("id")
+	products := []*models.Product{}
+
+	sess := d.MustCols("flag").Asc("id")
+
+	//如果Page项不为空
+	if product.Size != 0 && product.No != 0 {
+		sess = sess.Limit(product.Size, (product.No-1)*product.Size)
+	}
 
 	//时间范围
 	if len(product.TimeRange) != 0 {
@@ -75,7 +80,7 @@ func (d *ProductDao) GetProducts(product *models.Product) (*utils.ListAndCount, 
 		sess = sess.Where("create_time between ? and ?", first, last)
 	}
 
-	err := sess.Find(products, product) // 返回值，条件
+	err := sess.Find(&products, product) // 返回值，条件
 	if err != nil {
 		utils.Logger.Error("查询失败", zap.Any("product", product))
 		return nil, err
@@ -84,14 +89,11 @@ func (d *ProductDao) GetProducts(product *models.Product) (*utils.ListAndCount, 
 		utils.Logger.Info("没有查到相关数据", zap.Any("product", product))
 		return nil, errors.New("没有查到相关数据")
 	}
-	for _, v := range products {
-		pro = append(pro, v)
-	}
 
 	//搜索总数
 	count, _ := d.MustCols("flag").Count(product)
 
-	return utils.Lists(pro, uint64(count)), nil
+	return utils.Lists(products, uint64(count)), nil
 }
 
 //获取单个数据

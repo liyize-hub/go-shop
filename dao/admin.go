@@ -79,9 +79,8 @@ func (d *AdminDao) GetAdmin(admin *models.Admin) (*models.Admin, error) {
 
 //获取多个数据
 func (d *AdminDao) GetShops(admin *models.Admin) (*utils.ListAndCount, error) {
-	admins := make(map[int64]*models.Admin)
-	ad := []*models.Admin{}
-	sess := d.MustCols("flag").Limit(admin.Size, (admin.No-1)*admin.Size).Asc("id")
+	admins := []*models.Admin{}
+	sess := d.MustCols("flag").Limit(admin.Size, (admin.No-1)*admin.Size).Asc("id").Where("id != ?", 1)
 
 	//时间范围
 	if len(admin.TimeRange) != 0 {
@@ -90,19 +89,13 @@ func (d *AdminDao) GetShops(admin *models.Admin) (*utils.ListAndCount, error) {
 		sess = sess.Where("create_time between ? and ?", first, last)
 	}
 
-	err := sess.Find(admins, admin) // 返回值，条件
+	err := sess.Find(&admins, admin) // 返回值，条件
 	if err != nil {
 		utils.Logger.Error("查询失败", zap.Any("Admin", admin))
 		return nil, err
 	}
 
-	for _, v := range admins {
-		if v.ID != 1 { //过滤超级管理员id=1
-			ad = append(ad, v)
-		}
-	}
-
-	if len(ad) == 0 {
+	if len(admins) == 0 {
 		utils.Logger.Info("没有查到相关数据", zap.Any("Admin", admin))
 		return nil, errors.New("没有查到相关数据")
 	}
@@ -110,7 +103,7 @@ func (d *AdminDao) GetShops(admin *models.Admin) (*utils.ListAndCount, error) {
 	//搜索总数
 	count, _ := d.MustCols("flag").Count(admin)
 
-	return utils.Lists(ad, uint64(count)), nil
+	return utils.Lists(admin, uint64(count)), nil
 }
 
 //获取单个数据

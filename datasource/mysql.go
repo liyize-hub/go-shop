@@ -15,7 +15,6 @@ import (
 // 数据库连接
 func NewMysqlConn() (*xorm.Engine, error) {
 
-	
 	//1.创建数据库引擎对象
 	engine, err := xorm.NewEngine(config.DataBaseConfig.Drive, config.DataBaseConfig.URL)
 	if err != nil {
@@ -32,9 +31,8 @@ func NewMysqlConn() (*xorm.Engine, error) {
 	engine.SetMapper(core.GonicMapper{})                       //设置名称映射规则
 	err = engine.Sync2(
 		new(models.Product),
+		new(models.Category),
 		new(models.Admin),
-		new(models.User),
-		new(models.Order),
 		new(models.Activity),
 	) //将自定义的结构体同步到数据库中
 	if err != nil {

@@ -5,10 +5,10 @@ import "time"
 // 订单结构体
 type Order struct {
 	ID         int64     `json:"id" xorm:"pk autoincr"`
-	UserId     int64     `json:"user_id" xorm:"index"` //用户编号Id
+	UserID     int64     `json:"user_id" xorm:"index"` //用户编号Id
 	User       *User     `xorm:"-"`                    //订单对应的账户，并不进行结构体字段映射
-	Status     int       `json:"status"`               //订单状态
-	SumMoney   int       `json:"sum_money" xorm:"default 0"`
+	ProductID  int64     `json:"product_id" xorm:"index"`
+	Product    *Product  `xorm:"-"`
 	CreateTime time.Time `json:"time" xorm:"created"`                          //订单创建时间
 	Flag       int       `json:"flag" form:"flag" xorm:"tinyint(1) default 0"` //是否被删除的标志字段 软删除 0为有效，1为删除
 }

@@ -1,4 +1,4 @@
-package datasource
+package services
 
 import (
 	"go-shop/config"
@@ -15,7 +15,7 @@ import (
 var Imgc *cos.Client
 var Htmlc *cos.Client
 
-func GeImg(ctx iris.Context) {
+func GetImg(ctx iris.Context) {
 	file, fileHeader, err := ctx.FormFile("file")
 	if err != nil {
 		utils.Logger.Error("获取图片失败", zap.Any("Error", err))
@@ -64,21 +64,3 @@ func init() {
 	NewImgCOS()
 	NewHTMLCOS()
 }
-
-/*func writeImageWithTemplate(w http.ResponseWriter, img *image.Image) {
-
-	buffer := new(bytes.Buffer)
-	if err := jpeg.Encode(buffer, *img, nil); err != nil {
-		log.Fatalln("unable to encode image.")
-	}
-
-	str := base64.StdEncoding.EncodeToString(buffer.Bytes())
-	if tmpl, err := template.New("image").Parse(ImageTemplate); err != nil {
-		log.Println("unable to parse image template.")
-	} else {
-		data := map[string]interface{}{"Image": str}
-		if err = tmpl.Execute(w, data); err != nil {
-			log.Println("unable to execute template.")
-		}
-	}
-}*/

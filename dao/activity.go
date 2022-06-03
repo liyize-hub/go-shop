@@ -66,25 +66,21 @@ func (a *ActivityDao) UpdateActivityByID(ActivityID int64, Activity *models.Acti
 
 // 获取多个数据
 func (a *ActivityDao) GetActivitys(Activity *models.Activity) (*utils.ListAndCount, error) {
-	Activitys := make(map[int64]*models.Activity)
-	pro := []*models.Activity{}
-	err := a.MustCols("flag").Limit(Activity.Size, (Activity.No-1)*Activity.Size).Asc("id").Find(Activitys, Activity) // 返回值，条件
+	activitys := []*models.Activity{}
+	err := a.MustCols("flag").Limit(Activity.Size, (Activity.No-1)*Activity.Size).Asc("id").Find(&activitys, Activity) // 返回值，条件
 	if err != nil {
 		utils.Logger.Error("查询秒杀活动失败", zap.Any("Activity", Activity))
 		return nil, err
 	}
-	if len(Activitys) == 0 {
+	if len(activitys) == 0 {
 		utils.Logger.Info("没有查到相关数据", zap.Any("Activity", Activity))
 		return nil, errors.New("没有查到相关数据")
-	}
-	for _, v := range Activitys {
-		pro = append(pro, v)
 	}
 
 	//搜索总数
 	count, _ := a.MustCols("flag").Count(Activity)
 
-	return utils.Lists(pro, uint64(count)), nil
+	return utils.Lists(activitys, uint64(count)), nil
 }
 
 // 获取单个数据

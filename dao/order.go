@@ -63,9 +63,9 @@ func (o *OrderDao) UpdateOrderByID(orderID int64, order *models.Order) (err erro
 
 //获取多个数据
 func (o *OrderDao) GetOrders(order *models.Order) (*utils.ListAndCount, error) {
-	orders := make(map[int64]*models.Order)
+	orders := []*models.Order{}
 
-	err := o.MustCols("flag").Asc("id").Find(orders, order) // 返回值，条件
+	err := o.MustCols("flag").Asc("id").Find(&orders, order) // 返回值，条件
 	if err != nil {
 		utils.Logger.Error("查询失败", zap.Any("order", order))
 		return nil, err
