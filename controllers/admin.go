@@ -61,7 +61,7 @@ func (ac *AdminController) PostLogin() mvc.Result {
 	utils.GlobalCookie(ac.Ctx, "sign", uidString)
 
 	// 管理员存在 设置session
-	//ac.Session.Set("adminID", strconv.FormatInt(ad.ID, 10))
+	ac.Session.Set("adminID", strconv.FormatInt(ad.ID, 10))
 
 	//登录成功
 	return utils.NewJSONResponse(

@@ -52,7 +52,15 @@ func (d *ProductDao) DeleteProductByID(productID int64) (bool, error) {
 }
 
 func (d *ProductDao) UpdateProductByID(productID int64, product *models.Product) (err error) {
-	count, err := d.ID(productID).MustCols("flag", "num").Update(product)
+	sess := d.ID(productID).MustCols("flag", "num", "activity_num")
+
+	//删除秒杀活动操作
+	if product.Status == 2 {
+		sess = sess.MustCols("status","low_price","last")
+		product.Status = 0
+	}
+
+	count, err := sess.Update(product)
 	if err != nil {
 		utils.Logger.Error("更新商品失败", zap.Int64("ProductID", productID), zap.Any("product", product))
 		return

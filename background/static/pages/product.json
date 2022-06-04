@@ -183,44 +183,40 @@
                   {
                     "type": "form",
                     "api": {
-                      "url": "/activity/add",
+                      "url": "/product/update",
                       "method": "POST",
-                      "dataType": "form"
+                      "dataType": "form",
+                      "data": {
+                        "status": 1
+                      }
                     },
                     "rules": [
                       {
-                        "rule": "${product_id == id}",
-                        "message": "商品的id错误",
-                        "name": [
-                          "product_id"
-                        ]
-                      },
-                      {
-                        "rule": "${product_num <= num}",
+                        "rule": "${activity_num <= num}",
                         "message": "参与秒杀商品数量不能超过已上架商品数量",
                         "name": [
-                          "product_num"
+                          "activity_num"
                         ]
                       },
                       {
-                        "rule": "${product_price < price}",
+                        "rule": "${low_price < price}",
                         "message": "参与秒杀商品价格必须小于已上架商品价格",
                         "name": [
-                          "product_price"
+                          "low_price"
                         ]
                       },
                       {
-                        "rule": "${product_num != 0}",
-                        "message": "商品的数量不能为0",
+                        "rule": "${activity_num != 0}",
+                        "message": "秒杀商品的数量不能为0",
                         "name": [
-                          "product_num"
+                          "activity_num"
                         ]
                       },
                       {
-                        "rule": "${product_num != 0}",
-                        "message": "商品的价格不能为0",
+                        "rule": "${low_price != 0}",
+                        "message": "秒杀商品的价格不能为0",
                         "name": [
-                          "product_price"
+                          "low_price"
                         ]
                       },
                       {
@@ -233,11 +229,9 @@
                     ],
                     "body": [
                       {
-                        "type": "input-text",
+                        "type": "static",
                         "label": "商品ID",
-                        "name": "product_id",
-                        "required": true,
-                        "hint": "id为: $id"
+                        "name": "id"
                       },
                       {
                         "type": "static",
@@ -257,14 +251,14 @@
                       {
                         "type": "input-text",
                         "label": "秒杀活动商品数量",
-                        "name": "product_num",
+                        "name": "activity_num",
                         "required": true,
                         "hint": "不能超过$num个,大于0"
                       },
                       {
                         "label": "秒杀活动商品价格",
                         "type": "input-text",
-                        "name": "product_price",
+                        "name": "low_price",
                         "required": true,
                         "hint": "必须小于$price元,大于0"
                       },

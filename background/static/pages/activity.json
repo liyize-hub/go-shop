@@ -5,9 +5,12 @@
     {
       "type": "crud",
       "api": {
-        "url": "/activity/select",
+        "url": "/product/select",
         "method": "POST",
-        "dataType": "form"
+        "dataType": "form",
+        "data": {
+          "status": 1
+        }
       },
       "filter": {
         "title": "条件搜索",
@@ -15,7 +18,7 @@
           {
             "type": "input-text",
             "name": "id",
-            "label": "秒杀活动ID"
+            "label": "商品ID"
           },
           {
             "type": "input-text",
@@ -23,27 +26,11 @@
             "label": "秒杀商品名称"
           },
           {
-            "type": "radios",
-            "name": "flag",
-            "options": [
-              {
-                "label": "未激活",
-                "value": 0
-              },
-              {
-                "label": "已删除",
-                "value": 1
-              },
-              {
-                "label": "秒杀活动中",
-                "value": 2
-              }
-            ],
-            "submitOnChange": true,
-            "value": 0
+            "type": "input-text",
+            "name": "last",
+            "label": "秒杀活动持续时间"
           }
-        ],
-        "autoFocus": false
+        ]
       },
       "columns": [
         {
@@ -64,12 +51,17 @@
         {
           "type": "text",
           "label": "秒杀商品数量",
-          "name": "product_num"
+          "name": "activity_num"
+        },
+        {
+          "type": "text",
+          "label": "商品剩余数量",
+          "name": "num"
         },
         {
           "type": "text",
           "label": "秒杀优惠价格",
-          "name": "product_price"
+          "name": "low_price"
         },
         {
           "type": "text",
@@ -91,10 +83,17 @@
               "actionType": "ajax",
               "level": "link",
               "className": "text-danger",
-              "confirmText": "确定要删除？",
+              "confirmText": "确定要删除？秒杀活动进行中不允许删除！！！",
               "api": {
-                "url": "/activity/delete?id=${id}",
-                "method": "GET"
+                "url": "/product/update",
+                "method": "POST",
+                "dataType": "form",
+                "data": {
+                  "id": "$id",
+                  "num": "$num",
+                  "activity_num": "$activity_num",
+                  "status": 2
+                }
               },
               "visibleOn": "${flag==0}"
             }

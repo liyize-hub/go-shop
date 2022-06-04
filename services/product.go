@@ -55,6 +55,26 @@ func (p *productService) DeleteProduct(productID int64) (err error) {
 func (p *productService) UpdateProduct(product *models.Product) (err error) {
 	id := product.ID
 	product.ID = 0 //清空主键
+
+	//查询商品信息
+	pro, err := dao.NewProductDao(p.db).GetProduct(&models.Product{ID: id})
+
+	//请求添加秒杀活动
+	if product.Status == 1 {
+		product.Num -= product.ActivityNum
+		//过滤第一次添加的情况
+		if pro.ActivityNum != 0 {
+			product.ActivityNum = product.ActivityNum + pro.ActivityNum
+		}
+	}
+	//请求删除秒杀活动
+	if product.Status == 2 {
+		product.Num += product.ActivityNum
+		product.ActivityNum = 0
+		product.Last = 0
+		product.LowPrice = 0
+	}
+
 	err = dao.NewProductDao(p.db).UpdateProductByID(id, product)
 	return
 }
