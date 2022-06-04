@@ -1,6 +1,7 @@
 package router
 
 import (
+	"go-shop/config"
 	"go-shop/controllers"
 	"go-shop/datasource"
 	"go-shop/middleware"
@@ -22,7 +23,7 @@ func Router(app *iris.Application) {
 	}
 
 	sess := sessions.New(sessions.Config{
-		Cookie:  "Cookie",
+		Cookie:  config.ServerConfig.SessionID,
 		Expires: 1 * time.Hour, //1小时后过期
 	})
 

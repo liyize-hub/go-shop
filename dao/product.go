@@ -20,7 +20,7 @@ func NewProductDao(db *xorm.Engine) *ProductDao {
 	if db == nil {
 		db, err := datasource.NewMysqlConn()
 		if err != nil {
-			utils.Logger.Info("重新建立数据库连接失败", zap.Any("error", err))
+			utils.Logger.Info("商品数据重新建立数据库连接失败", zap.Any("error", err))
 		}
 		return &ProductDao{db}
 	}
@@ -31,17 +31,17 @@ func NewProductDao(db *xorm.Engine) *ProductDao {
 func (d *ProductDao) AddProduct(product *models.Product) (err error) {
 	count, err := d.Insert(product)
 	if err != nil {
-		utils.Logger.Error("插入失败", zap.Any("product", product))
+		utils.Logger.Error("插入商品失败", zap.Any("product", product))
 		return
 	}
-	utils.SugarLogger.Infof("成功插入%d条数据,数据id为%d", count, product.ID)
+	utils.SugarLogger.Infof("商品成功插入%d条数据,数据id为%d", count, product.ID)
 	return
 }
 
 func (d *ProductDao) DeleteProductByID(productID int64) (bool, error) {
-	count, err := d.ID(productID).UseBool().Update(&models.Product{Flag: 1})
+	count, err := d.ID(productID).Update(&models.Product{Flag: 1})
 	if err != nil {
-		utils.Logger.Error("删除失败", zap.Int64("delete id", productID))
+		utils.Logger.Error("删除商品失败", zap.Int64("delete id", productID))
 		return false, err
 	}
 
@@ -54,10 +54,10 @@ func (d *ProductDao) DeleteProductByID(productID int64) (bool, error) {
 func (d *ProductDao) UpdateProductByID(productID int64, product *models.Product) (err error) {
 	count, err := d.ID(productID).MustCols("flag", "num").Update(product)
 	if err != nil {
-		utils.Logger.Error("更新失败", zap.Int64("ProductID", productID), zap.Any("product", product))
+		utils.Logger.Error("更新商品失败", zap.Int64("ProductID", productID), zap.Any("product", product))
 		return
 	}
-	utils.SugarLogger.Infof("成功更新%d条数据,数据id为%d", count, productID)
+	utils.SugarLogger.Infof("商品成功更新%d条数据,数据id为%d", count, productID)
 
 	return
 }
@@ -82,12 +82,12 @@ func (d *ProductDao) GetProducts(product *models.Product) (*utils.ListAndCount, 
 
 	err := sess.Find(&products, product) // 返回值，条件
 	if err != nil {
-		utils.Logger.Error("查询失败", zap.Any("product", product))
+		utils.Logger.Error("查询商品失败", zap.Any("product", product))
 		return nil, err
 	}
 	if len(products) == 0 {
-		utils.Logger.Info("没有查到相关数据", zap.Any("product", product))
-		return nil, errors.New("没有查到相关数据")
+		utils.Logger.Info("商品没有查到相关数据", zap.Any("product", product))
+		return nil, errors.New("商品没有查到相关数据")
 	}
 
 	//搜索总数
@@ -98,14 +98,14 @@ func (d *ProductDao) GetProducts(product *models.Product) (*utils.ListAndCount, 
 
 //获取单个数据
 func (d *ProductDao) GetProduct(product *models.Product) (*models.Product, error) {
-	exist, err := d.Get(product)
+	exist, err := d.MustCols("flag").Get(product)
 	if err != nil {
-		utils.Logger.Error("查询失败", zap.Any("product", product))
+		utils.Logger.Error("查询商品失败", zap.Any("product", product))
 		return nil, err
 	}
 	if !exist {
-		utils.Logger.Info("没有查到相关数据", zap.Any("product", product))
-		return nil, errors.New("没有查到相关数据")
+		utils.Logger.Info("商品没有查到相关数据", zap.Any("product", product))
+		return nil, errors.New("商品没有查到相关数据")
 	}
 
 	return product, nil

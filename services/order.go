@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"go-shop/dao"
 	"go-shop/models"
 	"go-shop/utils"
@@ -9,12 +10,12 @@ import (
 )
 
 type OrderService interface {
-	SelectAllOrder() (*utils.ListAndCount, error)            //查询所有订单
-	SelectOrders(*models.Order) (*utils.ListAndCount, error) //查询订单
-	SelectOrderByID(int64) (*models.Order, error)            //查询一条订单数据
-	DeleteOrder(int64) error                                 //删除订单
 	InsertOrder(*models.Order) error                         //添加订单
+	DeleteOrder(int64) error                                 //删除订单
 	UpdateOrder(*models.Order) error                         //更新订单
+	SelectAllOrder() (*utils.ListAndCount, error)            //查询所有订单
+	SelectOrders(*models.Order) (*utils.ListAndCount, error) //查询多条订单数据
+	SelectOrderByID(int64) (*models.Order, error)            //查询一条订单数据
 }
 
 // 订单服务实现结构体
@@ -27,19 +28,13 @@ func NewOrderService(db *xorm.Engine) OrderService {
 	return &orderService{db: db}
 }
 
-func (o *orderService) SelectAllOrder() (*utils.ListAndCount, error) {
-	orderListandCount, err := dao.NewOrderDao(o.db).GetOrders(&models.Order{})
-	return orderListandCount, err
-}
+func (o *orderService) InsertOrder(order *models.Order) (err error) {
+	if order.Num == 0 || order.TotalPrice == 0 {
+		return errors.New("插入的订单数量或者价格为0")
+	}
 
-func (o *orderService) SelectOrders(order *models.Order) (*utils.ListAndCount, error) {
-	orderListandCount, err := dao.NewOrderDao(o.db).GetOrders(order)
-	return orderListandCount, err
-}
-
-func (p *orderService) SelectOrderByID(orderID int64) (*models.Order, error) {
-	order, err := dao.NewOrderDao(p.db).GetOrder(&models.Order{ID: orderID})
-	return order, err
+	err = dao.NewOrderDao(o.db).AddOrder(order)
+	return err
 }
 
 func (o *orderService) DeleteOrder(orderID int64) (err error) {
@@ -57,14 +52,24 @@ func (o *orderService) DeleteOrder(orderID int64) (err error) {
 	return
 }
 
-func (o *orderService) InsertOrder(order *models.Order) (err error) {
-	err = dao.NewOrderDao(o.db).AddOrder(order)
-	return err
-}
-
 func (o *orderService) UpdateOrder(order *models.Order) (err error) {
 	id := order.ID
 	order.ID = 0 //清空主键
 	err = dao.NewOrderDao(o.db).UpdateOrderByID(id, order)
 	return
+}
+
+func (o *orderService) SelectAllOrder() (*utils.ListAndCount, error) {
+	orderListandCount, err := dao.NewOrderDao(o.db).GetOrders(&models.Order{})
+	return orderListandCount, err
+}
+
+func (o *orderService) SelectOrders(order *models.Order) (*utils.ListAndCount, error) {
+	orderListandCount, err := dao.NewOrderDao(o.db).GetOrders(order)
+	return orderListandCount, err
+}
+
+func (o *orderService) SelectOrderByID(orderID int64) (*models.Order, error) {
+	Order, err := dao.NewOrderDao(o.db).GetOrder(&models.Order{ID: orderID})
+	return Order, err
 }

@@ -16,8 +16,8 @@ type AdminService interface {
 	GetByAdminNameAndPassword(username, password string) (*models.Admin, error) //通过用户名+密码 获取管理员实体
 	AddAdmin(*models.Admin) error                                               //添加管理员,注册商铺
 	SelectShop(*models.Admin) (*utils.ListAndCount, error)                      //查询商铺信息
-	DeleteShop(int64) error                                                     //删除商品
-	UpdateShop(*models.Admin) error                                             //更新商品
+	DeleteShop(int64) error                                                     //删除商铺
+	UpdateShop(*models.Admin) error                                             //更新商铺
 }
 
 // 管理员服务实现结构体
