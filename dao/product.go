@@ -56,7 +56,7 @@ func (d *ProductDao) UpdateProductByID(productID int64, product *models.Product)
 
 	//删除秒杀活动操作
 	if product.Status == 2 {
-		sess = sess.MustCols("status","low_price","last")
+		sess = sess.MustCols("status", "low_price", "last")
 		product.Status = 0
 	}
 
@@ -71,7 +71,7 @@ func (d *ProductDao) UpdateProductByID(productID int64, product *models.Product)
 }
 
 // 获取多个数据
-func (d *ProductDao) GetProducts(product *models.Product) (*utils.ListAndCount, error) {
+func (d *ProductDao) GetProducts(product *models.Product) ([]*models.Product, int64, error) {
 	products := []*models.Product{}
 
 	sess := d.MustCols("flag").Asc("id")
@@ -91,17 +91,17 @@ func (d *ProductDao) GetProducts(product *models.Product) (*utils.ListAndCount, 
 	err := sess.Find(&products, product) // 返回值，条件
 	if err != nil {
 		utils.Logger.Error("查询商品失败", zap.Any("product", product))
-		return nil, err
+		return nil, 0, err
 	}
 	if len(products) == 0 {
 		utils.Logger.Info("商品没有查到相关数据", zap.Any("product", product))
-		return nil, errors.New("商品没有查到相关数据")
+		return nil, 0, errors.New("商品没有查到相关数据")
 	}
 
 	//搜索总数
 	count, _ := d.MustCols("flag").Count(product)
 
-	return utils.Lists(products, uint64(count)), nil
+	return products, count, nil
 }
 
 //获取单个数据

@@ -8,14 +8,12 @@ import (
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
-	"github.com/kataras/iris/v12/sessions"
 	"go.uber.org/zap"
 )
 
 type AdminController struct {
 	Ctx     iris.Context          // iris框架自动为每个请求都绑定上下文对象
 	Service services.AdminService // admin功能实体
-	Session *sessions.Session     // session对象
 }
 
 /**
@@ -61,7 +59,7 @@ func (ac *AdminController) PostLogin() mvc.Result {
 	utils.GlobalCookie(ac.Ctx, "sign", uidString)
 
 	// 管理员存在 设置session
-	ac.Session.Set("adminID", strconv.FormatInt(ad.ID, 10))
+	//ac.Session.Set("adminID", strconv.FormatInt(ad.ID, 10))
 
 	//登录成功
 	return utils.NewJSONResponse(
@@ -159,7 +157,7 @@ func (ac *AdminController) PostUpdate() {
  * 接口：/admin/select
  * 方法：post
  */
- func (ac *AdminController) PostSelect() mvc.Result {
+func (ac *AdminController) PostSelect() mvc.Result {
 	ac.Ctx.Application().Logger().Info(" search admin start")
 	utils.Logger.Info("开始查询商铺")
 

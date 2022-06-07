@@ -1,6 +1,11 @@
 package models
 
-import "time"
+import (
+	"strconv"
+	"time"
+
+	"github.com/go-redis/redis"
+)
 
 // 商品结构体
 type Product struct {
@@ -21,4 +26,21 @@ type Product struct {
 	Detail      string     `json:"detail" form:"detail"`                             //商品简介
 	Flag        int        `json:"flag" form:"flag" xorm:"tinyint(1) default 0"`     //是否被删除的标志字段 软删除 0为有效，1为被删除
 	Pages       `xorm:"-"` //分页情况
+}
+
+/**
+ * 从Product数据库实体转换为前端请求的resp的json格式
+ */
+func (this *Product) ProductToRespDesc(rdb *redis.Client) interface{} {
+	respDesc := map[string]interface{}{
+		"id":      this.ID,
+		"shop_id": this.ShopID,
+		"name":    this.Name,
+		"price":   this.Price,
+		"detail":  this.Detail,
+		"num":     this.Num,
+		"img":     this.Img,
+	}
+	rdb.HMSet(this.Name+":"+strconv.FormatInt(this.ID, 10), respDesc)
+	return respDesc
 }

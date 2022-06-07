@@ -6,6 +6,7 @@ import (
 	"go-shop/models"
 	"go-shop/utils"
 
+	"github.com/go-redis/redis"
 	"xorm.io/xorm"
 )
 
@@ -20,11 +21,12 @@ type ProductService interface {
 
 // 商品服务实现结构体
 type productService struct {
-	db *xorm.Engine
+	db    *xorm.Engine
+	redis *redis.Client
 }
 
 // 初始化函数
-func NewProductService(db *xorm.Engine) ProductService {
+func NewProductService(db *xorm.Engine, redis *redis.Client) ProductService {
 	return &productService{db: db}
 }
 
@@ -80,13 +82,14 @@ func (p *productService) UpdateProduct(product *models.Product) (err error) {
 }
 
 func (p *productService) SelectAllProduct() (*utils.ListAndCount, error) {
-	productListandCount, err := dao.NewProductDao(p.db).GetProducts(&models.Product{})
-	return productListandCount, err
+	products, count, err := dao.NewProductDao(p.db).GetProducts(&models.Product{})
+	return utils.Lists(products, uint64(count)), err
 }
 
 func (p *productService) SelectProducts(product *models.Product) (*utils.ListAndCount, error) {
-	productListandCount, err := dao.NewProductDao(p.db).GetProducts(product)
-	return productListandCount, err
+	products, count, err := dao.NewProductDao(p.db).GetProducts(product)
+
+	return utils.Lists(products, uint64(count)), err
 }
 
 func (p *productService) SelectProductByID(productID int64) (*models.Product, error) {

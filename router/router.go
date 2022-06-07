@@ -1,34 +1,29 @@
 package router
 
 import (
-	"go-shop/config"
 	"go-shop/controllers"
 	"go-shop/datasource"
 	"go-shop/middleware"
 	"go-shop/services"
 	"go-shop/utils"
-	"time"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
-	"github.com/kataras/iris/v12/sessions"
 	"go.uber.org/zap"
 )
 
 func Router(app *iris.Application) {
-	//连接数据库
+	//连接mysql数据库
 	db, err := datasource.NewMysqlConn()
 	if err != nil {
-		utils.Logger.Fatal(err.Error())
+		utils.Logger.Error(err.Error())
 	}
 
-	sess := sessions.New(sessions.Config{
-		Cookie:  config.ServerConfig.SessionID,
-		Expires: 1 * time.Hour, //1小时后过期
-	})
-
-	redis := datasource.NewRedis()
-	sess.UseDatabase(redis)
+	//连接redis数据库
+	redis, err := datasource.NewRedisConn()
+	if err != nil {
+		utils.Logger.Error(err.Error())
+	}
 
 	//管理员登录页面
 	app.Get("/", func(ctx iris.Context) {
@@ -63,7 +58,7 @@ func Router(app *iris.Application) {
 	// 商品管理模块功能
 	product := mvc.New(app.Party("/product"))
 	product.Register(
-		services.NewProductService(db),
+		services.NewProductService(db, redis),
 	)
 	product.Handle(new(controllers.ProductController))
 
@@ -78,7 +73,6 @@ func Router(app *iris.Application) {
 	admin := mvc.New(app.Party("/admin"))
 	admin.Register(
 		services.NewAdminService(db),
-		sess.Start,
 	)
 	admin.Handle(new(controllers.AdminController))
 
@@ -86,7 +80,6 @@ func Router(app *iris.Application) {
 	user := mvc.New(app.Party("/user"))
 	user.Register(
 		services.NewUserService(db),
-		sess.Start,
 	)
 	user.Handle(new(controllers.UserController))
 }

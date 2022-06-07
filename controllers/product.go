@@ -143,7 +143,7 @@ func (p *ProductController) PostSelect() mvc.Result {
 
 	//从cookie中获取具体商铺
 	uid := p.Ctx.GetCookie("uid")
-	if uid != "1" {
+	if uid != "1" && uid != "" {
 		product.ShopID, _ = strconv.ParseInt(uid, 10, 64)
 	}
 

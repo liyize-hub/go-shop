@@ -19,8 +19,8 @@ type Order struct {
 }
 
 const (
-	OrderWait    = iota //已支付
-	OrderPay            //已发货
-	OrderSend           //已完成
-	OrderSuccess        //已删除
+	OrderPay     = iota //已支付
+	OrderSend           //已发货
+	OrderSuccess        //已完成
+	OrderDelete         //已删除
 )
