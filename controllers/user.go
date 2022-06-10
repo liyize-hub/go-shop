@@ -2,12 +2,14 @@ package controllers
 
 import (
 	"encoding/json"
+	"go-shop/config"
 	"go-shop/models"
 	"go-shop/services"
 	"go-shop/utils"
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
@@ -20,11 +22,32 @@ type UserController struct {
 }
 
 /**
- * 检查用户是否已注册
- * 接口：/user/
- * 方法：post
+ * 检查用户服务端登录状态
+ * 接口：/user/check
+ * 方法：get
  */
 func (u *UserController) GetCheck() {
+	token := u.Ctx.URLParam("token")
+	userID := u.Ctx.URLParam("id")
+
+	id, err := u.Service.GetToken(token)
+	if err != nil {
+		utils.Logger.Info("用户服务端登录过期", zap.Any("UserID", userID), zap.Any("error", err))
+		utils.SendJSON(u.Ctx, models.ErrorCode.NotFound, "用户服务端登录过期", nil)
+	}
+	if id == userID {
+		utils.SendJSON(u.Ctx, models.ErrorCode.SUCCESS, "", nil)
+	} else {
+		utils.SendJSON(u.Ctx, models.ErrorCode.NotFound, "用户服务端登录过期", nil)
+	}
+}
+
+/**
+ * 检查用户是否注册、用户登录
+ * 接口：/user/login
+ * 方法：get
+ */
+func (u *UserController) GetLogin() {
 	client := &http.Client{}
 	var result map[string]string
 
@@ -36,73 +59,62 @@ func (u *UserController) GetCheck() {
 		return
 	}
 	query := req.URL.Query()
-	query.Add("appid", "wxd7cb4fcb6da2a7e3")
-	query.Add("secret", "6884321740e25ea18d1a347d6ecb7c2b")
+	query.Add("appid", config.ServerConfig.WeChatAppID)
+	query.Add("secret", config.ServerConfig.WeChatSecret)
 	query.Add("js_code", code)
 	query.Add("grant_type", "authorization_code")
 	req.URL.RawQuery = query.Encode()
 
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		utils.Logger.Error("client.Do failed", zap.Any("err", err))
+		return
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		panic(err)
+		utils.Logger.Error("ReadAll failed", zap.Any("err", err))
+		return
 	}
 	err = json.Unmarshal(body, &result)
 	if err != nil {
 		utils.Logger.Error("Unmarshal failed", zap.Any("err", err))
+		return
 	}
-
-	utils.SendJSON(u.Ctx, models.ErrorCode.SUCCESS, "检测成功", result["openid"])
-
-}
-
-/**
- * 用户登录功能
- * 接口：/user/login
- * 方法：post
- */
-func (u *UserController) PostLogin() mvc.Result {
-	u.Ctx.Application().Logger().Info(" User login ")
-	utils.Logger.Info("用户登录")
-	var (
-		User models.User
-	)
-
-	err := u.Ctx.ReadForm(&User)
+	openID := result["openid"]
 	if err != nil {
-		utils.Logger.Error("ReadForm failed", zap.Any("error", err))
-		return utils.NewJSONResponse(models.ErrorCode.ERROR, "ReadForm failed", nil)
+		utils.Logger.Error("ParseInt failed", zap.Any("err", err))
+		return
 	}
 
-	//根据用户名、密码到数据库中查询对应的管理信息
-	ad, err := u.Service.GetByUserNameAndPassword(User.Name, User.Pwd)
+	user, exist, err := u.Service.SelectUser(&models.User{OpenID: openID, Flag: 0})
 	if err != nil {
-		utils.Logger.Error("GetByUserNameAndPassword error", zap.Any("err", err))
-		return utils.NewJSONResponse(models.ErrorCode.ERROR, err.Error(), nil)
+		utils.Logger.Error("SelectUserByID failed", zap.Any("err", err))
+		return
 	}
 
-	//写入用户ID到cookie中
-	utils.GlobalCookie(u.Ctx, "uid", strconv.FormatInt(ad.ID, 10))
+	if !exist {
+		token := utils.RandToken()
+		//用户注册保留10分钟的注册时间 token 保存openid值
+		err := u.Service.SetToken(token, openID, time.Minute*10)
+		if err != nil {
+			utils.Logger.Error("SetToken failed", zap.Any("err", err))
+		}
+		utils.SendJSON(u.Ctx, models.ErrorCode.NotFound, "用户不存在", token)
+		return
+	}
 
-	uidByte := []byte(strconv.FormatInt(ad.ID, 10))
-	uidString, err := utils.EnPwdCode(uidByte)
+	//openID对用户不可见
+	user.OpenID = ""
+	user.ID = 0
+	//token为用户服务端登录态标识
+	user.Token = utils.RandToken()
+	err = u.Service.SetToken(user.Token, user.ID, time.Hour*2) //设置2个小时的用户登录状态 key:token value:用户ID
 	if err != nil {
-		utils.Logger.Error("EnPwdCode error", zap.Any("err", err))
-		return utils.NewJSONResponse(models.ErrorCode.ERROR, err.Error(), nil)
+		utils.Logger.Error("SetToken failed", zap.Any("err", err))
+		return
 	}
-	//写入加密后的用户id到cookie
-	utils.GlobalCookie(u.Ctx, "sign", uidString)
-
-	//登录成功
-	return utils.NewJSONResponse(
-		models.ErrorCode.SUCCESS,
-		"用户登录成功",
-		nil,
-	)
+	utils.SendJSON(u.Ctx, models.ErrorCode.SUCCESS, "用户登录成功", user)
 }
 
 /**
@@ -110,31 +122,44 @@ func (u *UserController) PostLogin() mvc.Result {
  * 接口：/user/register
  * 方法: post
  */
-func (u *UserController) PostRegister() mvc.Result {
+func (u *UserController) PostRegister() {
 	u.Ctx.Application().Logger().Info(" User register ")
 	utils.Logger.Info("用户注册")
 	var (
-		User models.User
+		user models.User
 	)
 
-	err := u.Ctx.ReadForm(&User)
+	err := u.Ctx.ReadJSON(&user)
 	if err != nil {
 		utils.Logger.Error("ReadForm failed", zap.Any("error", err))
-		return utils.NewJSONResponse(models.ErrorCode.ERROR, "ReadForm err", nil)
+		utils.SendJSON(u.Ctx, models.ErrorCode.ERROR, "", nil)
 	}
+	if user.Token == "" {
+		utils.Logger.Info("无token", zap.Any("User", user))
+		utils.SendJSON(u.Ctx, models.ErrorCode.NotFound, "微信没有登录", nil)
+	}
+
+	openid, err := u.Service.GetToken(user.Token)
+	if err != nil {
+		utils.Logger.Info("用户注册过期", zap.Any("User", user), zap.Any("error", err))
+		utils.SendJSON(u.Ctx, models.ErrorCode.NotFound, "用户注册过期", nil)
+	}
+
+	//从redis获取openID
+	user.OpenID = openid
 
 	// 写入数据库
-	err = u.Service.AddUser(&User)
+	err = u.Service.AddUser(&user)
 	if err != nil {
 		utils.Logger.Error("InsertUser error", zap.Any("err", err))
-		return utils.NewJSONResponse(models.ErrorCode.ERROR, "添加用户用户失败", nil)
+		utils.SendJSON(u.Ctx, models.ErrorCode.ERROR, "添加用户失败", nil)
 	}
 
-	return utils.NewJSONResponse(models.ErrorCode.SUCCESS, "用户注册成功", nil)
+	utils.SendJSON(u.Ctx, models.ErrorCode.SUCCESS, "用户登录成功", nil)
 }
 
 /**
- * 删除商铺
+ * 删除用户
  * 接口：/user/manager
  * 方法：post
  */
@@ -161,13 +186,13 @@ func (u *UserController) GetDelete() {
 }
 
 /**
- * 修改商铺
+ * 修改用户
  * 接口：/user/update
  * 方法：post
  */
 func (u *UserController) PostUpdate() {
 	u.Ctx.Application().Logger().Info(" update User ")
-	utils.Logger.Info("更新商铺")
+	utils.Logger.Info("更新用户")
 	var User models.User
 
 	err := u.Ctx.ReadForm(&User)
@@ -189,13 +214,13 @@ func (u *UserController) PostUpdate() {
 }
 
 /**
- * 查询商铺信息
+ * 查询用户信息
  * 接口：/user/select
  * 方法：post
  */
 func (u *UserController) PostSelect() mvc.Result {
 	u.Ctx.Application().Logger().Info(" search User start")
-	utils.Logger.Info("开始查询商铺")
+	utils.Logger.Info("开始查询用户")
 
 	var (
 		User models.User
@@ -207,13 +232,7 @@ func (u *UserController) PostSelect() mvc.Result {
 		return utils.NewJSONResponse(models.ErrorCode.ERROR, "ReadForm error", nil)
 	}
 
-	//从cookie中获取具体商铺
-	uid := u.Ctx.GetCookie("uid")
-	if uid != "1" {
-		User.ID, _ = strconv.ParseInt(uid, 10, 64)
-	}
-
-	UserListandCount, err := u.Service.SelectUser(&User)
+	UserListandCount, err := u.Service.SelectUsers(&User)
 	if err != nil {
 		utils.Logger.Error("SelectUser error", zap.Any("err", err))
 		return utils.NewJSONResponse(models.ErrorCode.ERROR, err.Error(), nil)

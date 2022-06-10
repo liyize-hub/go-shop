@@ -21,13 +21,13 @@ type ProductService interface {
 
 // 商品服务实现结构体
 type productService struct {
-	db    *xorm.Engine
-	redis *redis.Client
+	db  *xorm.Engine
+	rdb *redis.Client
 }
 
 // 初始化函数
 func NewProductService(db *xorm.Engine, redis *redis.Client) ProductService {
-	return &productService{db: db}
+	return &productService{db: db, rdb: redis}
 }
 
 func (p *productService) InsertProduct(product *models.Product) (err error) {
@@ -66,7 +66,7 @@ func (p *productService) UpdateProduct(product *models.Product) (err error) {
 		product.Num -= product.ActivityNum
 		//过滤第一次添加的情况
 		if pro.ActivityNum != 0 {
-			product.ActivityNum = product.ActivityNum + pro.ActivityNum
+			product.ActivityNum += pro.ActivityNum
 		}
 	}
 	//请求删除秒杀活动

@@ -3,7 +3,6 @@ package utils
 import (
 	"io"
 	"log"
-	"os"
 	"time"
 
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
@@ -40,7 +39,7 @@ func initLog(logPath, errPath string, logLevel zapcore.Level) {
 	core := zapcore.NewTee(
 		zapcore.NewCore(zapcore.NewConsoleEncoder(config), zapcore.AddSync(infoWriter), infoLevel),
 		zapcore.NewCore(zapcore.NewConsoleEncoder(config), zapcore.AddSync(warnWriter), warnLevel),
-		zapcore.NewCore(zapcore.NewConsoleEncoder(config), zapcore.AddSync(os.Stdout), logLevel),
+		//zapcore.NewCore(zapcore.NewConsoleEncoder(config), zapcore.AddSync(os.Stdout), logLevel), //打印到命令行界面
 	)
 	//zap.AddStacktrace(zap.WarnLevel) 错误日志输出调用堆栈
 	Logger = zap.New(core, zap.AddCaller()) //加上地址

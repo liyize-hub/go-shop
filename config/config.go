@@ -15,15 +15,17 @@ var jsonData map[string]interface{}
  * 服务端配置
  */
 type serverConfig struct {
-	AppName   string
-	LogLevel  string
-	Port      string
-	SessionID string //后台设置的session id
-	Mode      string
-	ImgURL    string //图片cos存储桶地址
-	HtmlURL   string //静态页面cos存储桶地址
-	SecretID  string //腾讯云用户访问密钥ID
-	SecretKey string //腾讯云用户访问密钥Key
+	AppName      string
+	LogLevel     string
+	Port         string
+	SessionID    string //后台设置的session id
+	Mode         string
+	ImgURL       string //图片cos存储桶地址
+	HtmlURL      string //静态页面cos存储桶地址
+	SecretID     string //腾讯云用户访问密钥ID
+	SecretKey    string //腾讯云用户访问密钥Key
+	WeChatAppID  string //微信小程序appid
+	WeChatSecret string //微信小程序密钥
 }
 
 var ServerConfig serverConfig

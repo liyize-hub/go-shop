@@ -12,7 +12,7 @@ import (
 func NewRedisConn() (*redis.Client, error) {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     config.RedisConfig.Addr + ":" + config.RedisConfig.Port, // 指定
-		Password: config.RedisConfig.Pwd,
+		Password: "",//config.RedisConfig.Pwd,
 		DB:       0, // redis一共16个库，指定其中一个库即可 使用default DB
 	})
 

@@ -79,7 +79,7 @@ func Router(app *iris.Application) {
 	// 用户管理模块功能
 	user := mvc.New(app.Party("/user"))
 	user.Register(
-		services.NewUserService(db),
+		services.NewUserService(db, redis),
 	)
 	user.Handle(new(controllers.UserController))
 }

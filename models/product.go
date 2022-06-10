@@ -41,6 +41,6 @@ func (this *Product) ProductToRespDesc(rdb *redis.Client) interface{} {
 		"num":     this.Num,
 		"img":     this.Img,
 	}
-	rdb.HMSet(this.Name+":"+strconv.FormatInt(this.ID, 10), respDesc)
+	rdb.HMSet(this.Name+":pro:"+strconv.FormatInt(this.ID, 10), respDesc)
 	return respDesc
 }

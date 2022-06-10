@@ -11,6 +11,6 @@ type errorCode struct {
 var ErrorCode = errorCode{
 	SUCCESS:    0,
 	ERROR:      1,
-	NotFound:   404,
+	NotFound:   2,
 	LoginError: -1, //用户名或密码错误
 }

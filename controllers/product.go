@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"go-shop/models"
 	"go-shop/services"
 	"go-shop/utils"
@@ -91,7 +90,6 @@ func (p *ProductController) PostUpdate() {
 		utils.Logger.Error("ReadForm error", zap.Any("err", err))
 	}
 
-	fmt.Println("**********", product.ID)
 	if product.ID <= 0 {
 		utils.Logger.Info("更新数据不正确,id为0", zap.Any("Product", product))
 		return

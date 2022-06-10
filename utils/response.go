@@ -36,6 +36,7 @@ func NewJSONResponse(errno int, msg string, data interface{}, url ...string) mvc
 }
 
 func SendJSON(ctx iris.Context, errno int, msg string, data interface{}) {
+	Logger.Info("返回jsonData", zap.Int("errno", errno), zap.String("msg", msg), zap.Any("data", data))
 	ctx.JSON(
 		iris.Map{
 			"errNo": errno,
