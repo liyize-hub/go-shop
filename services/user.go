@@ -87,7 +87,7 @@ func (u *userService) SetToken(key string, value interface{}, time time.Duration
 	return nil
 }
 
-//设置token Redis
+//获取token Redis
 func (u *userService) GetToken(key string) (string, error) {
 	cmd := u.rdb.Get(key)
 	if cmd.Err() != nil {

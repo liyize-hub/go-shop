@@ -1,0 +1,63 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/activity/index",
+    "pages/product/category/index",
+    "pages/product/search/index",
+    "pages/product/list/index",
+    "pages/cart/index",
+    "pages/user/info/index",
+    "pages/user/login/index",
+    "pages/user/register/index",
+    "pages/order/info/index",
+    "pages/order/pay/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#00ccff",
+    "navigationBarTitleText": "本地购物商城",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh": true,
+    "backgroundColor": "#66ffff"
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#993333",
+    "backgroundColor": "#fafafa",
+    "position": "bottom",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "icons/房子.png",
+        "selectedIconPath": "icons/房子-选中.png"
+      },
+      {
+        "pagePath": "pages/activity/index",
+        "text": "秒杀",
+        "iconPath": "icons/秒杀.png",
+        "selectedIconPath": "icons/秒杀-选中.png"
+      },
+      {
+        "pagePath": "pages/product/category/index",
+        "text": "分类",
+        "iconPath": "icons/分类.png",
+        "selectedIconPath": "icons/分类-选中.png"
+      },
+      {
+        "pagePath": "pages/cart/index",
+        "text": "购物车",
+        "iconPath": "icons/购物车.png",
+        "selectedIconPath": "icons/购物车-选中.png"
+      },
+      {
+        "pagePath": "pages/user/info/index",
+        "text": "我的",
+        "iconPath": "icons/我的.png",
+        "selectedIconPath": "icons/我的-选中.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

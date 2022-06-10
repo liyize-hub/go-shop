@@ -1,0 +1,18 @@
+ <!-- 搜索框 -->
+<search/>
+
+ <!-- 轮播图 -->
+ <view class="index_swiper">
+    <swiper autoplay indicator-dots circular>
+      <swiper-item
+      wx:for="{{swiperList}}"
+      wx:key="id"
+      >
+        <navigator>
+          <image mode="widthFix" src="{{item.image}}"></image>
+        </navigator>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 商品列表 -->

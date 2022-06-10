@@ -1,0 +1,15 @@
+.content{
+  width: 100%;
+  height: 600px;
+  background-color: #f2f2f2;
+}
+
+.hr{
+  padding-top: 20px;
+}
+
+
+.zhuce{
+  margin-top: 40rpx;
+  width: 70%;
+}

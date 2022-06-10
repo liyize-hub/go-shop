@@ -1,0 +1,8 @@
+<view class="content">
+    <view class="hr"></view>
+        <view>手机号</view>
+        <view><input 	type="number" placeholder="请输入手机号" maxlength="11" bindblur="mobileblur"/></view>
+        <view>收货地址</view>
+        <view><input 	type="string" placeholder="请输入收货地址"  bindblur="addressblur"/></view>
+    <button class="zhuce" type="warn" plain bindtap="register"> 注册 </button>
+</view>

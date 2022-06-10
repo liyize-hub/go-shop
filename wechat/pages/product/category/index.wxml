@@ -1,0 +1,22 @@
+<view class="cates">
+  <search/>
+  <view class="cates_container">
+  <!-- 左侧菜单栏 -->
+  <scroll-view scroll-y class="left_menu">
+    <view 
+    class="menu_item {{index===currentIndex?'active':''}}"
+    wx:for="{{categoryList}}"
+    wx:key="id"
+    
+    bindtap="handleItemTap"
+    data-id="{{item.id}}"
+    >
+    {{item.name}}
+    </view>
+  </scroll-view>
+  <!-- 右侧商品目录 -->
+  <scroll-view scroll-top="{{scrollTop}}" scroll-y class="right_content">
+    <list productList="{{productList}}"/>
+  </scroll-view>
+  </view>
+</view>

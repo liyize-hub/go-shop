@@ -55,6 +55,9 @@ func Router(app *iris.Application) {
 	// 商品种类管理模块功能
 	app.Get("/category", services.GetAllCategory)
 
+	// 商品秒杀
+	app.Get("/seckill",services.Seckill)
+
 	// 商品管理模块功能
 	product := mvc.New(app.Party("/product"))
 	product.Register(

@@ -1,0 +1,1 @@
+<button type="primary" plain bindtap="check"> 登录 </button>

@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "t-icon": "../../miniprogram_npm/tdesign-miniprogram/icon/icon"
+  },
+  "navigationBarTitleText": "购物车页面"
+}

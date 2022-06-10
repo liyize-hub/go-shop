@@ -1,0 +1,6 @@
+<search/>
+<list
+  scrollTop="{{scrollTop}}"
+  productList="{{productList}}"
+  class="content"
+  />

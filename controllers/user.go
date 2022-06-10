@@ -104,9 +104,6 @@ func (u *UserController) GetLogin() {
 		return
 	}
 
-	//openID对用户不可见
-	user.OpenID = ""
-	user.ID = 0
 	//token为用户服务端登录态标识
 	user.Token = utils.RandToken()
 	err = u.Service.SetToken(user.Token, user.ID, time.Hour*2) //设置2个小时的用户登录状态 key:token value:用户ID
@@ -114,6 +111,9 @@ func (u *UserController) GetLogin() {
 		utils.Logger.Error("SetToken failed", zap.Any("err", err))
 		return
 	}
+	//openID、用户ID 对用户不可见
+	user.OpenID = ""
+	user.ID = 0
 	utils.SendJSON(u.Ctx, models.ErrorCode.SUCCESS, "用户登录成功", user)
 }
 

@@ -1,0 +1,31 @@
+<view class="product_item"
+wx:for="{{productList}}"
+wx:key="id"
+>
+    <!-- 左侧 图片容器 -->
+    <view class="product_img_wrap">
+    <image mode="aspectFit" src="{{item.img?item.img:'https://ww1.sinaimg.cn/large/007rAy9hgy1g24by9t530j30i20i2glm.jpg'}}"></image>
+    </view>
+    <!-- 右侧 商品容器 -->
+    <view class="product_info_wrap">
+        <view class="product_name">{{item.name}}</view>
+        <view class="product_detail">{{item.detail}}</view>
+        <view class="product_detail">商品库存：{{item.num}}</view>
+        <view class="downside">
+            <view class="product_price">￥{{item.price}}</view>
+            <button 
+                plain="true" 
+                type="warn" 
+                size="mini" 
+                bindtap="handleCartAdd"
+                data-id="{{item.id}}"
+                data-img="{{item.img}}"
+                data-num="{{item.num}}"
+                data-price="{{item.price}}"
+                data-detail="{{item.detail}}"
+                data-shop_id="{{item.shop_id}}"
+                data-name="{{item.name}}"
+            >+</button>
+        </view>
+    </view>
+</view>

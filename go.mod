@@ -7,9 +7,11 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/kataras/iris/v12 v12.2.0-beta2
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/streadway/amqp v0.0.0-20190827072141-edfb9018d271
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.35
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
+	golang.org/x/time v0.0.0-20220411224347-583f2d630306
 	xorm.io/core v0.7.3
 	xorm.io/xorm v1.3.0
 )
@@ -79,7 +81,6 @@ require (
 	golang.org/x/net v0.0.0-20220531201128-c960675eff93 // indirect
 	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
 	golang.org/x/text v0.3.7 // indirect
-	golang.org/x/time v0.0.0-20220411224347-583f2d630306 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.66.6 // indirect
