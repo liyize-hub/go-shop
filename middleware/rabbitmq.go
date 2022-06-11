@@ -13,7 +13,7 @@ import (
 )
 
 //连接信息
-const MQURL = "amqp://root:liyize01@127.0.0.1:5672/test"
+const MQURL = "amqp://root:liyize01@172.21.0.11:5672/test"
 
 //rabbitMQ结构体
 type RabbitMQ struct {
@@ -172,7 +172,7 @@ func InsertOrderByMessage(msg models.Message) (err error) {
 		return
 	}
 
-	order   := &models.Order{}
+	order := &models.Order{}
 	product := &models.Product{}
 
 	product.ID, err = strconv.ParseInt(msg.ProductKey[4:], 10, 64)

@@ -16,7 +16,7 @@ func Seckill(ctx iris.Context) {
 	token := ctx.URLParam("token")
 	productKey := "pro:" + ctx.URLParam("pid")
 
-	if token == "" || productKey == "" {
+	if token == "" || productKey == "pro:" {
 		utils.Logger.Error("请求数据为空")
 		utils.SendJSON(ctx, models.ErrorCode.ERROR, "请求数据为空", nil)
 		return

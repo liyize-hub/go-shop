@@ -81,6 +81,24 @@ func initRedis() {
 	utils.SetStructByJSON(&RedisConfig, jsonData["redis"].(map[string]interface{}))
 }
 
+/**
+ * Redis 配置
+ */
+type rabbitmqConfig struct {
+	User    string
+	Pwd     string
+	Addr    string
+	Port    string
+	Vhost   string
+	Prefix  string // key value set(name,"davie")  name -> xxx_name
+}
+
+var RabbitmqConfig rabbitmqConfig
+
+func initRabbitmq() {
+	utils.SetStructByJSON(&RabbitmqConfig, jsonData["rabbitmq"].(map[string]interface{}))
+}
+
 func initJson() {
 	bytes, err := ioutil.ReadFile("./config/conf.json")
 	if err != nil {
@@ -97,6 +115,7 @@ func init() {
 	initServer()
 	initDataBase()
 	initRedis()
+	initRabbitmq()
 }
 
 /*func InitConfig() *serverConfig {
