@@ -8,7 +8,7 @@ type Order struct {
 	UserID     int64      `json:"user_id" xorm:"index"` //用户编号Id
 	User       *User      `xorm:"-"`
 	Num        int        `json:"num" form:"num"`                 //订单中商品总数
-	TotalPrice int        `json:"total_price" form:"total_price"` //订单中商品总价格
+	TotalPrice float64    `json:"total_price" form:"total_price"` //订单中商品总价格
 	ProductID  int64      `json:"product_id" xorm:"index"`
 	Product    *Product   `xorm:"-"`
 	ShopID     int64      `json:"shop_id" form:"shop_id" xorm:"index"`

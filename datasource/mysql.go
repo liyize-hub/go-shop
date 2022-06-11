@@ -12,14 +12,20 @@ import (
 	"xorm.io/xorm/log"
 )
 
+var DB *xorm.Engine
+
 // 数据库连接
-func NewMysqlConn() (*xorm.Engine, error) {
+func NewMysqlConn() {
+	//如果数据库已连接
+	if DB != nil {
+		return
+	}
 
 	//1.创建数据库引擎对象
 	engine, err := xorm.NewEngine(config.DataBaseConfig.Drive, config.DataBaseConfig.URL)
 	if err != nil {
 		utils.Logger.Error("创建数据库引擎对象失败", zap.Any("error", err))
-		return nil, err
+		return
 	}
 
 	//2.数据库引擎关闭
@@ -34,24 +40,16 @@ func NewMysqlConn() (*xorm.Engine, error) {
 		new(models.Category),
 		new(models.Admin),
 		new(models.User),
+		new(models.Order),
 	) //将自定义的结构体同步到数据库中
 	if err != nil {
 		utils.Logger.Error("结构体同步数据库失败", zap.Any("error", err))
-		return engine, err
+		return
 	}
 
-	//判断表结构是否存在
-	exist, err := engine.IsTableExist(new(models.Product))
-	if err != nil {
-		utils.Logger.Error("判断表结构是否存在出错", zap.Any("error", err))
-		return engine, err
-	}
+	DB = engine
+}
 
-	if exist {
-		utils.Logger.Info("插入表操作正常")
-	} else {
-		utils.Logger.Error("插入表操作失败")
-	}
-
-	return engine, nil
+func init() {
+	NewMysqlConn()
 }

@@ -18,11 +18,7 @@ type OrderDao struct {
 func NewOrderDao(db *xorm.Engine) *OrderDao {
 	//判断数据库连接是否存在
 	if db == nil {
-		db, err := datasource.NewMysqlConn()
-		if err != nil {
-			utils.Logger.Info("订单数据重新建立数据库连接失败", zap.Any("error", err))
-		}
-		return &OrderDao{db}
+		db = datasource.DB
 	}
 
 	return &OrderDao{db}

@@ -12,11 +12,6 @@ import (
 )
 
 func Seckill(ctx iris.Context) {
-	rdb, err := datasource.NewRedisConn()
-	if err != nil {
-		utils.Logger.Error(err.Error())
-	}
-	defer rdb.Close()
 
 	token := ctx.URLParam("token")
 	productKey := "pro:" + ctx.URLParam("pid")
@@ -28,7 +23,7 @@ func Seckill(ctx iris.Context) {
 	}
 
 	//查找用户id
-	cmd := rdb.Get(token)
+	cmd := datasource.Rdb.Get(token)
 	if cmd.Err() != nil {
 		utils.Logger.Error("Get Redis error", zap.String("token", token), zap.Any("error", cmd.Err()))
 		utils.SendJSON(ctx, models.ErrorCode.ERROR, "用户未登录", nil)
@@ -43,7 +38,7 @@ func Seckill(ctx iris.Context) {
 	}
 
 	//执行抢购脚本
-	cmd1 := rdb.EvalSha(datasource.Sha1.Val(), []string{productKey})
+	cmd1 := datasource.Rdb.EvalSha(datasource.Sha1.Val(), []string{productKey})
 	result, err := cmd1.Int()
 	if err != nil {
 		utils.Logger.Error("EvalSha error", zap.Any("err", err))

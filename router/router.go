@@ -13,18 +13,6 @@ import (
 )
 
 func Router(app *iris.Application) {
-	//连接mysql数据库
-	db, err := datasource.NewMysqlConn()
-	if err != nil {
-		utils.Logger.Error(err.Error())
-	}
-
-	//连接redis数据库
-	redis, err := datasource.NewRedisConn()
-	if err != nil {
-		utils.Logger.Error(err.Error())
-	}
-
 	//管理员登录页面
 	app.Get("/", func(ctx iris.Context) {
 		ctx.View("login.html")
@@ -61,28 +49,28 @@ func Router(app *iris.Application) {
 	// 商品管理模块功能
 	product := mvc.New(app.Party("/product"))
 	product.Register(
-		services.NewProductService(db, redis),
+		services.NewProductService(datasource.DB, datasource.Rdb),
 	)
 	product.Handle(new(controllers.ProductController))
 
 	// 订单管理模块功能
 	order := mvc.New(app.Party("/order"))
 	order.Register(
-		services.NewOrderService(db),
+		services.NewOrderService(datasource.DB),
 	)
 	order.Handle(new(controllers.OrderController))
 
 	// 管理员管理模块功能
 	admin := mvc.New(app.Party("/admin"))
 	admin.Register(
-		services.NewAdminService(db),
+		services.NewAdminService(datasource.DB),
 	)
 	admin.Handle(new(controllers.AdminController))
 
 	// 用户管理模块功能
 	user := mvc.New(app.Party("/user"))
 	user.Register(
-		services.NewUserService(db, redis),
+		services.NewUserService(datasource.DB, datasource.Rdb),
 	)
 	user.Handle(new(controllers.UserController))
 }

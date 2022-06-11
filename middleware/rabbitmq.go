@@ -1,8 +1,12 @@
 package middleware
 
 import (
+	"encoding/json"
+	"errors"
+	"go-shop/datasource"
+	"go-shop/models"
 	"go-shop/utils"
-	"log"
+	"strconv"
 
 	"github.com/streadway/amqp"
 	"go.uber.org/zap"
@@ -115,13 +119,20 @@ func (r *RabbitMQ) ConsumeSimple() {
 		r.failOnErr(err, "创建队列失败")
 	}
 
+	//消费者流控
+	r.channel.Qos(
+		1,     //当前消费者一次能接受的最大消息数量
+		0,     //服务器传递的最大容量（以八位字节为单位）
+		false, //如果设置为true 对channel可用
+	)
+
 	//接收消息
 	msgs, err := r.channel.Consume(
 		q.Name, // queue
 		//用来区分多个消费者
 		"", // consumer
 		//是否自动应答
-		true, // auto-ack
+		false, // auto-ack
 		//是否独有
 		false, // exclusive
 		//设置为true，表示 不能将同一个Conenction中生产者发送的消息传递给这个Connection中 的消费者
@@ -138,10 +149,59 @@ func (r *RabbitMQ) ConsumeSimple() {
 	//启用协程处理消息
 	go func() {
 		for d := range msgs {
-			//消息逻辑处理，可以自行设计逻辑
-			log.Printf("Received a message: %s", d.Body)
-
+			msg := models.Message{}
+			err = json.Unmarshal(d.Body, &msg)
+			if err != nil {
+				utils.Logger.Error("json.Unmarshal error", zap.Any("error", err))
+			}
+			//插入订单
+			err = InsertOrderByMessage(msg)
+			if err != nil {
+				utils.Logger.Error("InsertOrderByMessage error", zap.Any("error", err))
+			}
+			//为false表示确认当前消息
+			d.Ack(false)
 		}
 	}()
 	<-forever
+}
+
+func InsertOrderByMessage(msg models.Message) (err error) {
+	if msg.ProductKey == "" || msg.UserID == 0 {
+		utils.Logger.Error("msg is empty", zap.Any("msg", msg))
+		return
+	}
+
+	order   := &models.Order{}
+	product := &models.Product{}
+
+	product.ID, err = strconv.ParseInt(msg.ProductKey[4:], 10, 64)
+	if err != nil {
+		utils.Logger.Error("ParseInt error", zap.String("productID", msg.ProductKey[4:]))
+		return
+	}
+
+	// 查询商品信息,获取shopID
+	exist, err := datasource.DB.MustCols("flag").Get(product)
+	if err != nil {
+		utils.Logger.Error("查询商品失败", zap.Any("product", product))
+		return err
+	}
+	if !exist {
+		utils.Logger.Info("商品没有查到相关数据", zap.Any("product", product))
+		return errors.New("商品没有查到相关数据")
+	}
+
+	order.ProductID = product.ID
+	order.ShopID = product.ShopID
+	order.UserID = msg.UserID
+	order.Num = 1
+	order.TotalPrice = product.LowPrice
+	_, err = datasource.DB.Insert(order)
+	if err != nil {
+		utils.Logger.Error("插入订单失败", zap.Any("Order", order))
+		return
+	}
+
+	return nil
 }

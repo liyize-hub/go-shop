@@ -5,6 +5,7 @@ import (
 	"go-shop/dao"
 	"go-shop/models"
 	"go-shop/utils"
+	"strconv"
 
 	"github.com/go-redis/redis"
 	"xorm.io/xorm"
@@ -68,7 +69,9 @@ func (p *productService) UpdateProduct(product *models.Product) (err error) {
 		if pro.ActivityNum != 0 {
 			product.ActivityNum += pro.ActivityNum
 		}
+		p.rdb.Set("pro:"+strconv.FormatInt(id, 10), product.ActivityNum, 0) //永不过期
 	}
+
 	//请求删除秒杀活动
 	if product.Status == 2 {
 		product.Num += product.ActivityNum

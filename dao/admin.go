@@ -18,11 +18,7 @@ type AdminDao struct {
 func NewAdminDao(db *xorm.Engine) *AdminDao {
 	//判断数据库连接是否存在
 	if db == nil {
-		db, err := datasource.NewMysqlConn()
-		if err != nil {
-			utils.Logger.Info("商铺管理员重新建立数据库连接失败", zap.Any("error", err))
-		}
-		return &AdminDao{db}
+		db = datasource.DB
 	}
 
 	return &AdminDao{db}

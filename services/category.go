@@ -13,11 +13,6 @@ import (
 )
 
 func GetAllCategory(ctx iris.Context) {
-	db, err := datasource.NewMysqlConn()
-	if err != nil {
-		utils.Logger.Fatal(err.Error())
-	}
-	defer db.Close()
 
 	categories := []*models.Category{}
 
@@ -31,11 +26,11 @@ func GetAllCategory(ctx iris.Context) {
 		product.No = page
 		product.Size = perpage
 		product.Flag = 0 //商品有效
-		getProductsWithCategoryID(ctx, db, product)
+		getProductsWithCategoryID(ctx, datasource.DB, product)
 		return
 	}
 
-	err = db.Asc("id").MustCols("flag").Find(&categories, &models.Category{Flag: 0})
+	err := datasource.DB.Asc("id").MustCols("flag").Find(&categories, &models.Category{Flag: 0})
 	if err != nil {
 		utils.Logger.Error("商品种类查询失败", zap.Any("err", err))
 		utils.SendJSON(ctx, models.ErrorCode.ERROR, "商品种类查询失败", utils.Lists("", 0))
@@ -59,17 +54,11 @@ func getProductsWithCategoryID(ctx iris.Context, db *xorm.Engine, product *model
 		utils.SendJSON(ctx, models.ErrorCode.NotFound, "没有查到相关数据", utils.Lists("", 0))
 		return
 	}
-	//连接redis数据库
-	rdb, err := datasource.NewRedisConn()
-	if err != nil {
-		utils.Logger.Error(err.Error())
-	}
-	defer rdb.Close()
 
 	//将查询到的用户数据进行转换成前端需要的内容
 	var respList []interface{}
 	for _, v := range products {
-		resp := v.ProductToRespDesc(rdb)
+		resp := v.ProductToRespDesc(datasource.Rdb)
 		//rdb.HSet(ctx, v.Name+":"+strconv.FormatInt(v.ID, 10), )
 		respList = append(respList, resp)
 	}
